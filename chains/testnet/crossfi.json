@@ -1,8 +1,8 @@
 {
     "chain_name": "crossfi",
     "coingecko": "",
-    "api": ["https://crossfi-testnet-api.itrocket.net"], 
-    "rpc": ["https://crossfi-testnet-rpc.itrocket.net"],
+    "api": ["https://api.crossfi.linkednode.xyz/","https://crossfi-testnet-api.itrocket.net"], 
+    "rpc": ["https://rpc.crossfi.linkednode.xyz/","https://crossfi-testnet-rpc.itrocket.net"],
     "snapshot_provider": "",
     "sdk_version": "0.46.13",
     "coin_type": "60",
