@@ -13,7 +13,7 @@
     "assets": [{
         "base": "ua0gi",
         "symbol": "AOGI",
-        "exponent": "18", 
+        "exponent": "6", 
         "coingecko_id": "",
         "logo": "/logos/0glabs.jpg"
     }]
