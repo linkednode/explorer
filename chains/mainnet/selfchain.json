@@ -1,0 +1,27 @@
+{
+    "chain_name": "selfchain",
+    "registry_name": "selfchain",
+    "api": [
+
+        {"provider": "Selfchain", "address": "https://api.selfchain.io/"},
+        {"provider": "Indonode", "address": "https://api.selfchain.indonode.net"}
+
+
+    ],
+    "rpc": [
+        {"provider": "Nodestake", "address": "https://rpc.selfchain.io/"},
+        {"provider": "Indonode", "address": "https://rpc.selfchain.indonode.net"}
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1",
+    "addr_prefix": "self",
+    "logo": "/logos/self.jpg",
+    "assets": [
+      {
+        "base": "uslf",
+        "symbol": "SLF",
+        "exponent": "6",
+        "logo": "/logos/self.jpg"
+    }]
+}
