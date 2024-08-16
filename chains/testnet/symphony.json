@@ -1,6 +1,6 @@
 {
-    "chain_name": "symphony-testnet",
-    "registry_name": "symphony-testnet",
+    "chain_name": "symphony",
+    "registry_name": "symphony",
     "api": [
 
         {"provider": "Indonode", "address": "https://api.symphony-t.indonode.net"},
