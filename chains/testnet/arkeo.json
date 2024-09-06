@@ -1,0 +1,31 @@
+{
+    "chain_name": "arkeo",
+    "registry_name": "arkeo",
+    "api": [
+
+        {"provider": "Polkachu", "address": "https://arkeo-testnet-api.polkachu.com"},
+        {"provider": "Nodestake", "address": "https://api-t.arkeo.nodestake.org"}
+
+
+
+    ],
+    "rpc": [
+
+        {"provider": "Polkachu", "address": "https://arkeo-testnet-rpc.polkachu.com"},
+        {"provider": "Nodestake", "address": "https://rpc-t.arkeo.nodestake.org"}
+
+
+    ],
+    "sdk_version": "0.47.8",
+    "coin_type": "118",
+    "min_tx_fee": "800",
+    "addr_prefix": "arkeo",
+    "logo": "/logos/arkeo.jpg",
+    "assets": [{
+        "base": "uarkeo",
+        "symbol": "arkeo",
+        "exponent": "6",
+        "coingecko_id": "",
+        "logo": "/logos/arkeo.jpg"
+    }]
+}
