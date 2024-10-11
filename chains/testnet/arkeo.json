@@ -3,8 +3,8 @@
     "registry_name": "arkeo",
     "api": [
 
-        {"provider": "Polkachu", "address": "https://arkeo-testnet-api.polkachu.com"},
-        {"provider": "Nodestake", "address": "https://api-t.arkeo.nodestake.org"}
+        {"provider": "Moonbridge", "address": "https://arkeo-test.api.moonbridge.team"},
+        {"provider": "StakerHouse", "address": "https://arkeo-testnet-rest.stakerhouse.com"}
 
 
 
@@ -24,7 +24,7 @@
     "assets": [{
         "base": "uarkeo",
         "symbol": "arkeo",
-        "exponent": "6",
+        "exponent": "8",
         "coingecko_id": "",
         "logo": "/logos/arkeo.jpg"
     }]
