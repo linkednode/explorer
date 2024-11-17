@@ -3,18 +3,11 @@
     "registry_name": "symphony",
     "api": [
 
-        {"provider": "Indonode", "address": "https://api.symphony-t.indonode.net"},
-        {"provider": "Kleomedes", "address": "https://symphony-api.kleomedes.network"}
-
-
-
+        {"provider": "Vinjan", "address": "https://api-symphonyd.vinjan.xyz"}
     ],
     "rpc": [
 
-        {"provider": "Indonode", "address": "https://rpc.symphony-t.indonode.net"},
-        {"provider": "Kleomedes", "address": "https://symphony-rpc.kleomedes.network"}
-
-
+        {"provider": "Vinjan", "address": "https://rpc-symphonyd.vinjan.xyz"}
     ],
     "sdk_version": "0.47.8",
     "coin_type": "118",
