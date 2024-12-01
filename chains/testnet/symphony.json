@@ -3,22 +3,24 @@
     "registry_name": "symphony",
     "api": [
 
-        {"provider": "Vinjan", "address": "https://api-symphonyd.vinjan.xyz"}
+        {"provider": "Vinjan", "address": "https://api-symphonyd.vinjan.xyz"},
+        {"provider": "linkednode", "address": "https://api.symphony-t.linkednode.xyz"}
     ],
     "rpc": [
 
-        {"provider": "Vinjan", "address": "https://rpc-symphonyd.vinjan.xyz"}
+        {"provider": "Vinjan", "address": "https://rpc-symphonyd.vinjan.xyz"},
+        {"provider": "linkednode", "address": "https://rpc.symphony-t.linkednode.xyz"}
     ],
     "sdk_version": "0.47.8",
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "symphony",
-    "logo": "/logos/symphony.jpg",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/symphony.jpg",
     "assets": [{
         "base": "note",
         "symbol": "MLD",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "/logos/symphony.jpg"
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/symphony.jpg"
     }]
 }

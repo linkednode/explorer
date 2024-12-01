@@ -7,13 +7,13 @@
     "coin_type": "118",
     "min_tx_fee": "0",
     "addr_prefix": "self",
-    "logo": "/logos/self.jpg",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg",
     "keplr_features": ["ibc-transfer", "ibc-go"],
     "assets": [{
         "base": "uself",
         "symbol": "SELF",
         "exponent": "6",
         "coingecko_id": "",
-        "logo": "/logos/self.jpg"
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg"
     }]
 }

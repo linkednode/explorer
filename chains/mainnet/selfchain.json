@@ -16,12 +16,12 @@
     "coin_type": "118",
     "min_tx_fee": "1",
     "addr_prefix": "self",
-    "logo": "/logos/self.jpg",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg",
     "assets": [
       {
         "base": "uslf",
         "symbol": "SLF",
         "exponent": "6",
-        "logo": "/logos/self.jpg"
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg"
     }]
 }

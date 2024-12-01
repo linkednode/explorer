@@ -6,13 +6,13 @@
     "min_tx_fee": 200,
     "sdk_version": "0.45.11",
     "addr_prefix": "warden",
-    "logo": "/logos/warden.jpeg",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/warden.jpeg",
     "assets": [
       {
         "base": "uward",
         "symbol": "WARD",
         "exponent": 6,
-        "logo": "/logos/warden.png"
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/warden.png"
       }
     ]
   }

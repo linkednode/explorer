@@ -20,12 +20,12 @@
     "coin_type": "118",
     "min_tx_fee": "800",
     "addr_prefix": "arkeo",
-    "logo": "/logos/arkeo.jpg",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/arkeo.jpg",
     "assets": [{
         "base": "uarkeo",
         "symbol": "arkeo",
         "exponent": "8",
         "coingecko_id": "",
-        "logo": "/logos/arkeo.jpg"
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/arkeo.jpg"
     }]
 }

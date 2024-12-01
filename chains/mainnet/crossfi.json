@@ -8,13 +8,13 @@
     "coin_type": "60",
     "min_tx_fee": "4000",
     "addr_prefix": "mx",
-    "logo": "/logos/crossfi.jpg",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/crossfi.jpg",
     "keplr_features": ["eth-address-gen", "eth-key-sign"],
     "assets": [{
         "base": "mpx",
         "symbol": "PX",
         "exponent": "18", 
         "coingecko_id": "",
-        "logo": "/logos/crossfi.jpg"
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/crossfi.jpg"
     }]
 }

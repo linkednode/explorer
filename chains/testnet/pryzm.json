@@ -9,13 +9,13 @@
   "sdk_version": "0.47.6",
   "addr_prefix": "pryzm",
   "min_tx_fee": "5000",
-  "logo": "/logos/pryzm.jpg",
+  "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/pryzm.jpg",
   "assets": [
     {
       "symbol": "PRYZM",
       "base": "upryzm",
       "exponent": 6,
-      "logo": "/logos/pryzm.jpg"
+      "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/pryzm.jpg"
     }
   ]
 }

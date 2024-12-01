@@ -8,13 +8,13 @@
     "coin_type": "60",
     "min_tx_fee": "4000",
     "addr_prefix": "gala",
-    "logo": "/logos/galactica.jpg",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/galactica.jpg",
     "keplr_features": ["eth-address-gen", "eth-key-sign"],
     "assets": [{
         "base": "agnet",
         "symbol": "GNET",
         "exponent": "18", 
         "coingecko_id": "",
-        "logo": "/logos/galactica.jpg"
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/galactica.png"
     }]
 }
