@@ -1,0 +1,20 @@
+{
+    "chain_name": "atomone",
+    "coingecko": "",
+    "api": ["https://atomone-api.allinbits.services"], 
+    "rpc": ["https://atomone-rpc.allinbits.services"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.12",
+    "coin_type": "60",
+    "min_tx_fee": "4000",
+    "addr_prefix": "atone",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/atomone.png",
+    "keplr_features": ["eth-address-gen", "eth-key-sign"],
+    "assets": [{
+        "base": "uatone",
+        "symbol": "ATONE",
+        "exponent": "6", 
+        "coingecko_id": "",
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/atomone.png"
+    }]
+}
