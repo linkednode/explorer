@@ -1,7 +1,7 @@
 {
-    "chain_name": "selfchain",
-    "api": ["https://api-devnet.selfchain.xyz", "https://api-t.self.nodestake.top"],
-    "rpc": ["https://rpc-devnet.selfchain.xyz", "https://rpc-t.self.nodestake.top"],
+    "chain_name": "selfchain-testnet",
+    "api": ["https://rpc-testnet.selfchain.xyz:1317"],
+    "rpc": ["https://rpc-testnet.selfchain.xyz:26657"],
     "snapshot_provider": "",
     "sdk_version": "0.46.7",
     "coin_type": "118",
@@ -10,8 +10,8 @@
     "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg",
     "keplr_features": ["ibc-transfer", "ibc-go"],
     "assets": [{
-        "base": "uself",
-        "symbol": "SELF",
+        "base": "uslf",
+        "symbol": "SLF",
         "exponent": "6",
         "coingecko_id": "",
         "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg"
