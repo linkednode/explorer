@@ -1,0 +1,27 @@
+{
+    "chain_name": "dora",
+    "registry_name": "dora",
+    "api": [
+
+        {"provider": "Dora", "address": "https://vota-bobtail-rest.dorafactory.org"},
+        {"provider": "RoomIT", "address": "https://api.dora.roomit.dev"}
+
+
+    ],
+    "rpc": [
+        {"provider": "Dora", "address": "https://vota-bobtail-rpc.dorafactory.org"},
+        {"provider": "RoomIT", "address": "https://rpc.dora.roomit.dev"}
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1",
+    "addr_prefix": "dora",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/dora.png",
+    "assets": [
+      {
+        "base": "peaka",
+        "symbol": "DORA",
+        "exponent": "18",
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/dora.png"
+    }]
+}

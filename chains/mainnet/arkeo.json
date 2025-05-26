@@ -1,0 +1,27 @@
+{
+    "chain_name": "arkeo",
+    "registry_name": "arkeo",
+    "api": [
+
+        {"provider": "Nodestake", "address": "https://api.arkeo.nodestake.org"},
+        {"provider": "StakerHouse", "address": "https://arkeo-rest.stakerhouse.com"}
+
+
+    ],
+    "rpc": [
+        {"provider": "Nodestake", "address": "https://rpc.arkeo.nodestake.org"},
+        {"provider": "StakerHouse", "address": "https://arkeo-rpc.stakerhouse.com"}
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1",
+    "addr_prefix": "arkeo",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/arkeo.jpg",
+    "assets": [
+      {
+        "base": "uarkeo",
+        "symbol": "ARKEO",
+        "exponent": "8",
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/arkeo.jpg"
+    }]
+}

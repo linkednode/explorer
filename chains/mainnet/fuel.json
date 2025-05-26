@@ -1,0 +1,27 @@
+{
+    "chain_name": "fuel",
+    "registry_name": "fuel",
+    "api": [
+
+        {"provider": "Nodestake", "address": "https://api.fuel.nodestake.org"},
+        {"provider": "ITRocket", "address": "https://fuel-mainnet-api.itrocket.net"}
+
+
+    ],
+    "rpc": [
+        {"provider": "Nodestake", "address": "https://rpc.fuel.nodestake.org"},
+        {"provider": "ITRocket", "address": "https://fuel-mainnet-rpc.itrocket.net"}
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1",
+    "addr_prefix": "fuelsequencer",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/fuel.jpg",
+    "assets": [
+      {
+        "base": "fuel",
+        "symbol": "fuel",
+        "exponent": "9",
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/fuel.jpg"
+    }]
+}
