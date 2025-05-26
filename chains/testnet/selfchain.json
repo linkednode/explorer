@@ -3,11 +3,13 @@
     "registry_name": "selfchain",
     "api": [
 
+        {"provider": "STAVR", "address": "https://selfchain.api.t.stavr.tech"},
         {"provider": "RoomIT", "address": "https://api.selfchain.roomit.dev"}
 
 
     ],
     "rpc": [
+        {"provider": "STAVR", "address": "https://selfchain.rpc.t.stavr.tech"},
         {"provider": "RoomIT", "address": "https://rpc.selfchain.roomit.dev"}
     ],
     "sdk_version": "0.46.7",
