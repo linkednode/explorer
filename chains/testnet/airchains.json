@@ -1,17 +1,27 @@
 {
     "chain_name": "airchains",
-    "api": ["https://airchains-testnet-api.itrocket.net"],
-    "rpc": ["https://airchains-testnet-rpc.itrocket.net"],
-    "sdk_version": "0.50.3",
-    "addr_prefix": "air",
-    "min_tx_fee": "200",
+    "registry_name": "airchains",
+    "api": [
+
+        {"provider": "ITRocket", "address": "https://airchains-testnet-api.itrocket.net"},
+        {"provider": "Synergy Nodes", "address": "https://junction-testnet-api.synergynodes.com"}
+
+
+    ],
+    "rpc": [
+        {"provider": "ITRocket", "address": "https://airchains-testnet-api.itrocket.net"},
+        {"provider": "Synergy Nodes", "address": "https://junction-testnet-rpc.synergynodes.com"}
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1",
+    "addr_prefix": "junction",
     "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/airchains.jpg",
     "assets": [
       {
+        "base": "uamf",
         "symbol": "AMF",
-        "base": "amf",
-        "exponent": 6,
+        "exponent": "6",
         "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/airchains.jpg"
-      }
-    ]
-  }
+    }]
+}

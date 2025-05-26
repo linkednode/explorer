@@ -1,19 +1,25 @@
 {
-    "chain_name": "selfchain-testnet",
-    "api": ["https://rpc-testnet.selfchain.xyz:1317"],
-    "rpc": ["https://rpc-testnet.selfchain.xyz:26657"],
-    "snapshot_provider": "",
+    "chain_name": "selfchain",
+    "registry_name": "selfchain",
+    "api": [
+
+        {"provider": "RoomIT", "address": "https://api.selfchain.roomit.dev"}
+
+
+    ],
+    "rpc": [
+        {"provider": "RoomIT", "address": "https://rpc.selfchain.roomit.dev"}
+    ],
     "sdk_version": "0.46.7",
     "coin_type": "118",
-    "min_tx_fee": "0",
+    "min_tx_fee": "1",
     "addr_prefix": "self",
     "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg",
-    "keplr_features": ["ibc-transfer", "ibc-go"],
-    "assets": [{
+    "assets": [
+      {
         "base": "uslf",
         "symbol": "SLF",
         "exponent": "6",
-        "coingecko_id": "",
         "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg"
     }]
 }
