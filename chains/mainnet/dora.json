@@ -1,0 +1,20 @@
+{
+    "chain_name": "dora",
+    "coingecko": "",
+    "api": ["https://doravota-mainnet-api.itrocket.net"], 
+    "rpc": ["https://doravota-mainnet-rpc.itrocket.net"],
+    "snapshot_provider": "",
+    "sdk_version": "0.46.12",
+    "coin_type": "60",
+    "min_tx_fee": "4000",
+    "addr_prefix": "dora",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/dora.png",
+    "keplr_features": ["eth-address-gen", "eth-key-sign"],
+    "assets": [{
+        "base": "peaka",
+        "symbol": "DORA",
+        "exponent": "18", 
+        "coingecko_id": "",
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/dora.png"
+    }]
+}
