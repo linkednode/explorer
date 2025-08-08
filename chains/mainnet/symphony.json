@@ -1,0 +1,23 @@
+{
+    "chain_name": "symphony",
+    "registry_name": "symphony",
+    "api": [
+
+        {"provider": "KonsorTech", "address": "https://mainnet-symphony-api.konsortech.xyz"}
+    ],
+    "rpc": [
+        {"provider": "KonsorTech", "address": "https://mainnet-symphony-rpc.konsortech.xyz"}
+    ],
+    "sdk_version": "0.47.10",
+    "coin_type": "118",
+    "min_tx_fee": "1",
+    "addr_prefix": "symphony",
+    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/symphony.jpg",
+    "assets": [
+      {
+        "base": "note",
+        "symbol": "MLD",
+        "exponent": "6",
+        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/symphony.jpg"
+    }]
+}
