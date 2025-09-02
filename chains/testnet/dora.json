@@ -3,14 +3,12 @@
     "registry_name": "dora",
     "api": [
 
-        {"provider": "Dora", "address": "https://vota-bobtail-rest.dorafactory.org"},
-        {"provider": "RoomIT", "address": "https://api.dora.roomit.dev"}
-
-
+        {"provider": "Dora", "address": "https://vota-testnet-api.dorafactory.org"},
+        {"provider": "ITRocket", "address": "https://dora-testnet-api.itrocket.net"}
     ],
     "rpc": [
-        {"provider": "Dora", "address": "https://vota-bobtail-rpc.dorafactory.org"},
-        {"provider": "RoomIT", "address": "https://rpc.dora.roomit.dev"}
+        {"provider": "Dora", "address": "https://vota-testnet-rpc.dorafactory.org"},
+        {"provider": "ITRocket", "address": "https://dora-testnet-rpc.itrocket.net"}
     ],
     "sdk_version": "0.47.10",
     "coin_type": "118",
