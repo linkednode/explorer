@@ -395,3 +395,72 @@ export const getDonutChartConfig = (theme: string, labels: string[]) => {
     ],
   };
 };
+
+export const getTxsInBlocksChartConfig = (theme: string, categories: string[]) => {
+  const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(theme);
+
+  const config = {
+    chart: {
+      type: 'bar',
+      height: 200, // Slightly increased height for better readability
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '70%', // Adjust column width
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    colors: [themeColors(theme).colors.primary], // Use theme primary color
+    grid: {
+      show: true,
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: true },
+      },
+      yaxis: {
+        lines: { show: false },
+      },
+    },
+    xaxis: {
+      categories,
+      labels: {
+        show: true, // Show labels
+        rotate: -45,
+        style: {
+          colors: themeDisabledTextColor,
+        },
+      },
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      crosshairs: {
+        stroke: { color: themeBorderColor },
+      },
+    },
+    yaxis: {
+      labels: {
+        show: true, // Show labels
+        style: {
+          colors: themeDisabledTextColor,
+        },
+        formatter: function (value: number) {
+          return numeral(value).format('0a'); // Format as integer with 'k', 'm' for large numbers
+        },
+      },
+    },
+    tooltip: {
+      theme: 'dark',
+      shared: false,
+      y: {
+        formatter: function (val: number) {
+          return `${val} Txs`;
+        },
+      },
+    },
+  };
+  return config;
+};

@@ -35,28 +35,49 @@ const voterStatusMap: Record<string, string> = {
 const proposalInfo = ref();
 
 function metaItem(metadata: string | undefined): { title: string; summary: string } {
-  return metadata ? JSON.parse(metadata) : {};
+  if (metadata) {
+    try {
+      const parsed = JSON.parse(metadata);
+      return {
+        title: parsed.title || '',
+        summary: parsed.summary || '',
+      };
+    } catch (e) {
+      console.error('Failed to parse metadata:', e);
+      return { title: '', summary: '' };
+    }
+  }
+  return { title: '', summary: '' };
 }
 </script>
 <template>
-  <div class="bg-white dark:bg-[#28334e] rounded text-sm">
-    <table class="table-compact w-full table-fixed hidden lg:!table">
-      <tbody>
-        <tr v-for="(item, index) in proposals?.proposals" :key="index">
-          <td class="px-4 w-20">
-            <label
-              for="proposal-detail-modal"
-              class="text-main text-base hover:text-indigo-400 cursor-pointer"
-              @click="proposalInfo = item"
-            >
-              #{{ item?.proposal_id }}</label
-            >
-          </td>
-          <td class="w-full">
-            <div>
+  <div class="card bg-base-100 shadow-lg rounded-box text-base-content text-sm">
+    <div class="overflow-x-auto hidden lg:block">
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th class="w-20">#ID</th>
+            <th>Title</th>
+            <th class="w-60">Progress</th>
+            <th class="w-36">Status</th>
+            <th v-if="proposals?.proposals?.some(p => statusMap?.[p?.status] === 'VOTING')" class="w-40">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in proposals?.proposals" :key="index" class="hover:bg-base-200">
+            <td class="px-4 py-3">
+              <label
+                for="proposal-detail-modal"
+                class="link link-hover text-primary font-semibold"
+                @click="proposalInfo = item"
+              >
+                #{{ item?.proposal_id }}</label
+              >
+            </td>
+            <td class="py-3">
               <RouterLink
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
-                class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
+                class="link link-hover text-base-content font-medium block truncate"
               >
                 {{
                   item?.content?.title ||
@@ -66,54 +87,35 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
               </RouterLink>
               <div
                 v-if="item.content"
-                class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+                class="badge badge-outline badge-primary badge-sm mt-1"
               >
                 {{ showType(item.content['@type']) }}
               </div>
-            </div>
-          </td>
-          <td class="w-60">
-            <ProposalProcess :pool="staking.pool" :tally="item.final_tally_result"></ProposalProcess>
-          </td>
-          <td class="w-36">
-            <div class="pl-4">
-              <div
-                class="flex items-center"
-                :class="
-                  statusMap?.[item?.status] === 'PASSED'
-                    ? 'text-yes'
-                    : statusMap?.[item?.status] === 'REJECTED'
-                    ? 'text-no'
-                    : 'text-info'
-                "
-              >
-                <div
-                  class="w-1 h-1 rounded-full mr-2"
-                  :class="
-                    statusMap?.[item?.status] === 'PASSED'
-                      ? 'bg-yes'
-                      : statusMap?.[item?.status] === 'REJECTED'
-                      ? 'bg-no'
-                      : 'bg-info'
-                  "
-                ></div>
-                <div class="text-xs">
+            </td>
+            <td class="py-3">
+              <ProposalProcess :pool="staking.pool" :tally="item.final_tally_result"></ProposalProcess>
+            </td>
+            <td class="py-3">
+              <div class="flex items-center gap-2">
+                <span
+                  class="badge badge-lg"
+                  :class="{
+                    'badge-success': statusMap?.[item?.status] === 'PASSED',
+                    'badge-error': statusMap?.[item?.status] === 'REJECTED',
+                    'badge-info': statusMap?.[item?.status] === 'VOTING',
+                  }"
+                >
                   {{ statusMap?.[item?.status] || item?.status }}
-                </div>
+                </span>
+                <span class="text-xs text-neutral-content">
+                  {{ format.toDay(item.voting_end_time, 'from') }}
+                </span>
               </div>
-              <div
-                class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:!flex md:!justify-start"
-              >
-                {{ format.toDay(item.voting_end_time, 'from') }}
-              </div>
-            </div>
-          </td>
-
-          <td v-if="statusMap?.[item?.status] === 'VOTING'" class="w-40">
-            <div class="">
+            </td>
+            <td v-if="statusMap?.[item?.status] === 'VOTING'" class="py-3">
               <label
                 for="vote"
-                class="btn btn-xs btn-primary rounded-sm"
+                class="btn btn-sm btn-primary"
                 @click="
                   dialog.open('vote', {
                     proposal_id: item?.proposal_id,
@@ -123,101 +125,82 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
                   item?.voterStatus?.replace('VOTE_OPTION_', '')
                 }}</span>
-
                 <span v-else>Vote</span>
               </label>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div class="lg:!hidden">
-      <div v-for="(item, index) in proposals?.proposals" :key="index" class="px-4 py-4">
-        <div class="text-main text-base mb-1 flex justify-between hover:text-indigo-400">
-          <RouterLink :to="`/${chain.chainName}/gov/${item?.proposal_id}`" class="flex-1 w-0 truncate mr-4">{{
-            item?.content?.title || item?.title || metaItem(item?.metadata)?.title
-          }}</RouterLink>
+    <!-- Mobile View -->
+    <div class="lg:hidden p-4 space-y-4">
+      <div v-for="(item, index) in proposals?.proposals" :key="index" class="card bg-base-200 shadow-md p-4">
+        <div class="flex justify-between items-start mb-2">
+          <RouterLink :to="`/${chain.chainName}/gov/${item?.proposal_id}`" class="text-base-content font-medium text-lg flex-1 truncate mr-4">
+            {{ item?.content?.title || item?.title || metaItem(item?.metadata)?.title }}
+          </RouterLink>
           <label
             for="proposal-detail-modal"
-            class="text-main text-base hover:text-indigo-400 cursor-pointer"
+            class="link link-hover text-primary font-semibold"
             @click="proposalInfo = item"
           >
             #{{ item?.proposal_id }}</label
           >
         </div>
 
-        <div class="grid grid-cols-4 mt-2 mb-2">
-          <div class="col-span-2">
-            <div
-              v-if="item.content"
-              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
-            >
-              {{ showType(item.content['@type']) }}
-            </div>
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <div
+            v-if="item.content"
+            class="badge badge-outline badge-primary badge-sm"
+          >
+            {{ showType(item.content['@type']) }}
           </div>
-
-          <div class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end">
+          <span
+            class="badge badge-lg"
+            :class="{
+              'badge-success': statusMap?.[item?.status] === 'PASSED',
+              'badge-error': statusMap?.[item?.status] === 'REJECTED',
+              'badge-info': statusMap?.[item?.status] === 'VOTING',
+            }"
+          >
+            {{ statusMap?.[item?.status] || item?.status }}
+          </span>
+          <span class="text-xs text-neutral-content ml-auto">
             {{ format.toDay(item.voting_end_time, 'from') }}
-          </div>
+          </span>
         </div>
 
-        <div>
+        <div class="mb-4">
           <ProposalProcess :pool="staking.pool" :tally="item.final_tally_result"></ProposalProcess>
         </div>
 
-        <div class="mt-4" v-if="statusMap?.[item?.status] === 'VOTING'">
-          <div class="flex justify-between">
-            <div
-              class="flex items-center"
-              :class="
-                statusMap?.[item?.status] === 'PASSED'
-                  ? 'text-yes'
-                  : statusMap?.[item?.status] === 'REJECTED'
-                  ? 'text-no'
-                  : 'text-info'
-              "
-            >
-              <div
-                class="w-1 h-1 rounded-full mr-2"
-                :class="
-                  statusMap?.[item?.status] === 'PASSED'
-                    ? 'bg-yes'
-                    : statusMap?.[item?.status] === 'REJECTED'
-                    ? 'bg-no'
-                    : 'bg-info'
-                "
-              ></div>
-              <div class="text-xs flex items-center">
-                {{ statusMap?.[item?.status] || item?.status }}
-              </div>
-            </div>
-            <label
-              for="vote"
-              class="btn btn-xs btn-primary rounded-sm"
-              @click="
-                dialog.open('vote', {
-                  proposal_id: item?.proposal_id,
-                })
-              "
-            >
-              <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
-                item?.voterStatus?.replace('VOTE_OPTION_', '')
-              }}</span>
-
-              <span v-else>Vote</span></label
-            >
-          </div>
+        <div v-if="statusMap?.[item?.status] === 'VOTING'" class="text-right">
+          <label
+            for="vote"
+            class="btn btn-sm btn-primary"
+            @click="
+              dialog.open('vote', {
+                proposal_id: item?.proposal_id,
+              })
+            "
+          >
+            <span v-if="item?.voterStatus !== 'VOTE_OPTION_NO_WITH_VETO'">{{
+              item?.voterStatus?.replace('VOTE_OPTION_', '')
+            }}</span>
+            <span v-else>Vote</span>
+          </label>
         </div>
       </div>
     </div>
 
+    <!-- Proposal Detail Modal -->
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
-    <label for="proposal-detail-modal" class="modal">
-      <label class="modal-box !w-11/12 !max-w-5xl" for="">
-        <label for="proposal-detail-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-        <h3 class="font-bold text-lg">Description</h3>
-        <p class="py-4">
+    <label for="proposal-detail-modal" class="modal cursor-pointer">
+      <label class="modal-box relative !w-11/12 !max-w-3xl bg-base-100 shadow-xl rounded-box p-6" for="">
+        <label for="proposal-detail-modal" class="btn btn-sm btn-circle absolute right-4 top-4">✕</label>
+        <h3 class="font-bold text-2xl text-base-content mb-4">Proposal Description</h3>
+        <div class="prose max-w-none text-base-content">
           <Component
             v-if="
               proposalInfo?.content?.description || proposalInfo?.summary || metaItem(proposalInfo?.metadata)?.summary
@@ -235,7 +218,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
             "
           >
           </Component>
-        </p>
+        </div>
       </label>
     </label>
   </div>

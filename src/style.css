@@ -21,16 +21,16 @@ body {
 }
 
 :root {
-  --text-main: #333;
-  --text-secondary: #4b525d;
-  --bg-active: #fbfbfc;
+  --text-main: #1f2937; /* base-100 in dark mode */
+  --text-secondary: #4b5563; /* neutral in light mode */
+  --bg-active: #f3f4f6; /* base-200 in light mode */
 }
 
 html.dark,
 html[data-theme='dark'] {
-  --text-main: #f7f7f7;
-  --text-secondary: #6f6e84;
-  --bg-active: #242b40;
+  --text-main: #f3f4f6; /* base-200 in light mode */
+  --text-secondary: #d1d5db; /* neutral in dark mode */
+  --bg-active: #111827; /* base-200 in dark mode */
 }
 
 .table th:first-child {
@@ -51,4 +51,23 @@ html[data-theme='dark'] {
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(-calc(15%));
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-active); /* Use a theme-aware background */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--text-secondary); /* Use a theme-aware thumb color */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-main); /* Darker on hover */
 }

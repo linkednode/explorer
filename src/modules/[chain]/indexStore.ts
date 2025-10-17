@@ -43,6 +43,9 @@ export const useIndexModule = defineStore('module-index', {
         },
         categories: [] as string[],
         market_cap_rank: 0,
+        image: {
+          large: '',
+        },
         links: {
           twitter_screen_name: '',
           homepage: [] as string[],
@@ -111,10 +114,9 @@ export const useIndexModule = defineStore('module-index', {
       return `https://t.me/${this.coinInfo?.links.telegram_channel_identifier}`;
     },
 
-    priceChange(): string {
-      if (!this.coinInfo?.market_data?.price_change_percentage_24h) return '';
-      const change = this.coinInfo?.market_data?.price_change_percentage_24h || 0;
-      return numeral(change).format('+0.[00]');
+    priceChange(): number {
+      if (!this.coinInfo?.market_data?.price_change_percentage_24h) return 0;
+      return this.coinInfo?.market_data?.price_change_percentage_24h || 0;
     },
 
     priceColor(): string {
@@ -227,10 +229,11 @@ export const useIndexModule = defineStore('module-index', {
               denom: t.denom,
             }));
         });
-      // const gov = useGovStore();
-      // gov.fetchProposals('2').then((x) => {
-      //   this.proposals = x;
-      // });
+      const gov = useGovStore();
+      gov.fetchProposals('2').then((x) => {
+        // @ts-ignore
+        this.proposals = x;
+      });
     },
     tickerColor(color: string) {
       return colorMap(color);

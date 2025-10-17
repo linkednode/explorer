@@ -2,45 +2,33 @@
 import ApexCharts from 'vue3-apexcharts';
 import { computed, ref } from '@vue/reactivity';
 import { useBaseStore } from '@/stores';
+import { getTxsInBlocksChartConfig } from './apexChartConfig'; // Import the new config function
 
 const baseStore = useBaseStore();
 
-const options = computed(() => {
-  return {
-    chart: {
-      type: 'bar',
-      height: 150,
-    },
-    plotOptions: {
-      bar: {
-        // borderRadius: 4,
-        horizontal: false,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    colors: ['#5A67D8'],
-    xaxis: {
-      labels: {
-        show: false,
-        rotate: -45,
-      },
-      show: false,
-      categories: baseStore.recents
-        .slice(0, 50)
-        .map((x) => x.block.header.height)
-        .concat(Array(Math.max(0, 50)).fill('')),
-    },
-  };
+const currentTheme = computed(() => {
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 });
+
+const options = computed(() => {
+  const categories = baseStore.recents
+    .slice(0, 50)
+    .map((x) => x.block.header.height)
+    .reverse(); // Reverse to show latest blocks on the right
+
+  const chartOptions = getTxsInBlocksChartConfig(currentTheme.value, categories);
+  return chartOptions;
+});
+
 const series = computed(() => {
-  return [
+  const data = baseStore.recents?.map((x) => x.block.data.txs.length).reverse() || []; // Reverse data as well
+  const chartSeries = [
     {
       name: 'Txs',
-      data: baseStore.recents?.map((x) => x.block.data.txs.length) || [],
+      data: data,
     },
   ];
+  return chartSeries;
 });
 </script>
 

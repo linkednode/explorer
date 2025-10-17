@@ -3,7 +3,7 @@ import { computed } from '@vue/reactivity';
 import MdEditor from 'md-editor-v3';
 import ObjectElement from '@/components/dynamic/ObjectElement.vue';
 import { useBaseStore, useBlockchain, useFormatter, useGovStore, useStakingStore, useTxDialog } from '@/stores';
-import { PageRequest, type GovProposal, type GovVote, type PaginatedProposalDeposit, type Pagination } from '@/types';
+import { PageRequest, type GovProposal, type GovVote, type PaginatedProposalDeposit, type Pagination, type Tally } from '@/types';
 import { ref, reactive } from 'vue';
 import Countdown from '@/components/Countdown.vue';
 import PaginationBar from '@/components/PaginationBar.vue';
@@ -18,19 +18,23 @@ const stakingStore = useStakingStore();
 const chainStore = useBlockchain();
 
 store.fetchProposal(props.proposal_id).then((res) => {
+  if (!res || !res.proposal) {
+    console.error('Failed to fetch proposal details.');
+    return;
+  }
   let proposalDetail = reactive(res.proposal);
   // when status under the voting, final_tally_result are no data, should request fetchTally
-  if (res.proposal?.status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
+  if (proposalDetail.status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
     store.fetchTally(props.proposal_id).then((tallRes) => {
-      proposalDetail.final_tally_result = tallRes?.tally;
+      proposalDetail.final_tally_result = tallRes?.tally || { yes: '0', abstain: '0', no: '0', no_with_veto: '0' };
     });
   }
   proposal.value = proposalDetail;
   // load origin params if the proposal is param change
   if (proposalDetail.content?.changes) {
     proposalDetail.content?.changes.forEach((item) => {
-      chainStore.rpc.getParams(item.subspace, item.key).then((res) => {
-        if (proposal.value.content && res.param) {
+      chainStore.rpc?.getParams(item.subspace, item.key).then((res) => {
+        if (proposal.value.content && res?.param) {
           if (proposal.value.content.current) {
             proposal.value.content.current.push(res.param);
           } else {
@@ -44,19 +48,19 @@ store.fetchProposal(props.proposal_id).then((res) => {
   const msgType = proposalDetail.content?.['@type'] || '';
   if (msgType.endsWith('MsgUpdateParams')) {
     if (msgType.indexOf('staking') > -1) {
-      chainStore.rpc.getStakingParams().then((res) => {
+      chainStore.rpc?.getStakingParams().then((res) => {
         addCurrentParams(res);
       });
     } else if (msgType.indexOf('gov') > -1) {
-      chainStore.rpc.getGovParamsVoting().then((res) => {
+      chainStore.rpc?.getGovParamsVoting().then((res) => {
         addCurrentParams(res);
       });
     } else if (msgType.indexOf('distribution') > -1) {
-      chainStore.rpc.getDistributionParams().then((res) => {
+      chainStore.rpc?.getDistributionParams().then((res) => {
         addCurrentParams(res);
       });
     } else if (msgType.indexOf('slashing') > -1) {
-      chainStore.rpc.getSlashingParams().then((res) => {
+      chainStore.rpc?.getSlashingParams().then((res) => {
         addCurrentParams(res);
       });
     }
@@ -64,7 +68,7 @@ store.fetchProposal(props.proposal_id).then((res) => {
 });
 
 function addCurrentParams(res: any) {
-  if (proposal.value.content && res.params) {
+  if (proposal.value.content && res?.params) {
     proposal.value.content.params = [proposal.value.content?.params];
     proposal.value.content.current = [res.params];
   }
@@ -85,15 +89,17 @@ const status = computed(() => {
 });
 
 const deposit = ref({} as PaginatedProposalDeposit);
-store.fetchProposalDeposits(props.proposal_id).then((x) => (deposit.value = x));
+store.fetchProposalDeposits(props.proposal_id).then((x) => {
+  deposit.value = x || { deposits: [], pagination: {} }; // Provide default
+});
 
-const votes = ref({} as GovVote[]);
+const votes = ref([] as GovVote[]); // Initialize as empty array
 const pageRequest = ref(new PageRequest());
 const pageResponse = ref({} as Pagination);
 
 store.fetchProposalVotes(props.proposal_id).then((x) => {
-  votes.value = x.votes;
-  pageResponse.value = x.pagination;
+  votes.value = x?.votes || []; // Provide default
+  pageResponse.value = x?.pagination || {}; // Provide default
 });
 
 function shortTime(v: string) {
@@ -198,8 +204,8 @@ function showValidatorName(voter: string) {
 function pageload(p: number) {
   pageRequest.value.setPage(p);
   store.fetchProposalVotes(props.proposal_id, pageRequest.value).then((x) => {
-    votes.value = x.votes;
-    pageResponse.value = x.pagination;
+    votes.value = x?.votes || []; // Provide default
+    pageResponse.value = x?.pagination || {}; // Provide default
   });
 }
 

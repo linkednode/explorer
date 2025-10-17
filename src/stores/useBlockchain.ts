@@ -25,6 +25,7 @@ export const useBlockchain = defineStore('blockchain', {
       chainName: '',
       endpoint: {} as Endpoint,
       connErr: '',
+      rpc: undefined as CosmosRestClient | undefined, // Added rpc to state
     };
   },
   getters: {
@@ -128,6 +129,7 @@ export const useBlockchain = defineStore('blockchain', {
       //     const { global } = useTheme();
       //     global.current
       // }
+      await this.randomSetupEndpoint(); // Ensure RPC client is set up
       useWalletStore().$reset();
       if (!this.isConsumerChain) {
         await useStakingStore().init();

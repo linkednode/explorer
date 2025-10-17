@@ -61,101 +61,91 @@ onBeforeRouteUpdate(async (to, from, next) => {
 });
 </script>
 <template>
-  <div>
-    <div v-if="isFutureBlock" class="text-center">
+  <div class="container mx-auto px-4 py-8">
+    <div v-if="isFutureBlock" class="card bg-base-100 shadow-xl rounded-box p-6 text-center">
       <div v-if="remainingBlocks > 0">
-        <div class="text-primary font-bold text-lg my-10">#{{ target }}</div>
-        <Countdown :time="estimateTime" css="md:!text-5xl font-sans md:mx-5" />
-        <div class="my-5">
+        <h2 class="text-4xl font-extrabold text-primary mb-6">#{{ target }}</h2>
+        <Countdown :time="estimateTime" css="text-5xl font-sans mb-6" />
+        <p class="text-lg text-neutral-content mb-8">
           {{ $t('block.estimated_time') }}:
-          <span class="text-xl font-bold">{{ format.toLocaleDate(estimateDate) }}</span>
-        </div>
-        <div class="pt-10 flex justify-center">
-          <table class="table w-max rounded-lg bg-base-100">
-            <tbody>
-              <tr class="hover cursor-pointer" @click="edit = !edit">
-                <td>{{ $t('block.countdown_for_block') }}:</td>
-                <td class="text-right">
-                  <span class="md:!ml-40">{{ target }}</span>
-                </td>
-              </tr>
-              <tr v-if="edit">
-                <td colspan="2" class="text-center">
-                  <h3 class="text-lg font-bold">{{ $t('block.countdown_for_block_input') }}</h3>
-                  <div class="py-4">
+          <span class="font-bold text-base-content">{{ format.toLocaleDate(estimateDate) }}</span>
+        </p>
+        <div class="flex justify-center">
+          <div class="overflow-x-auto">
+            <table class="table w-full max-w-md bg-base-200 rounded-lg shadow-md">
+              <tbody>
+                <tr class="hover cursor-pointer" @click="edit = !edit">
+                  <td class="font-semibold">{{ $t('block.countdown_for_block') }}:</td>
+                  <td class="text-right text-base-content">{{ target }}</td>
+                </tr>
+                <tr v-if="edit">
+                  <td colspan="2" class="text-center py-4">
+                    <h3 class="text-lg font-bold text-base-content mb-3">{{ $t('block.countdown_for_block_input') }}</h3>
                     <div class="join">
-                      <input class="input input-bordered join-item" v-model="newHeight" type="number" />
+                      <input class="input input-bordered join-item input-primary" v-model="newHeight" type="number" />
                       <button class="btn btn-primary join-item" @click="updateTarget()">
                         {{ $t('block.btn_update') }}
                       </button>
                     </div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>{{ $t('block.current_height') }}:</td>
-                <td class="text-right">
-                  #{{ store.latest?.block?.header.height }}
-                </td>
-              </tr>
-              <tr>
-                <td>{{ $t('block.remaining_blocks') }}:</td>
-                <td class="text-right">{{ remainingBlocks }}</td>
-              </tr>
-              <tr>
-                <td>{{ $t('block.average_block_time') }}:</td>
-                <td class="text-right">
-                  {{ (store.blocktime / 1000).toFixed(1) }}s
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">{{ $t('block.current_height') }}:</td>
+                  <td class="text-right text-base-content">#{{ store.latest?.block?.header.height }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">{{ $t('block.remaining_blocks') }}:</td>
+                  <td class="text-right text-base-content">{{ remainingBlocks }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">{{ $t('block.average_block_time') }}:</td>
+                  <td class="text-right text-base-content">
+                    {{ (store.blocktime / 1000).toFixed(1) }}s
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
     <div v-else>
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">
-          <p class="">#{{ current.block?.header?.height }}</p>
-          <div class="flex" v-if="props.height">
+      <div class="card bg-base-100 shadow-xl rounded-box p-6 mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+          <h2 class="text-3xl font-bold text-base-content mb-2 sm:mb-0">#{{ current.block?.header?.height }}</h2>
+          <div class="flex gap-2" v-if="props.height">
             <RouterLink
               :to="`/${store.blockchain.chainName}/block/${height - 1}`"
-              class="btn btn-primary btn-sm p-1 text-2xl mr-2"
+              class="btn btn-outline btn-primary btn-circle"
             >
-              <Icon icon="mdi-arrow-left" class="w-full h-full" />
+              <Icon icon="mdi-arrow-left" class="text-2xl" />
             </RouterLink>
             <RouterLink
               :to="`/${store.blockchain.chainName}/block/${height + 1}`"
-              class="btn btn-primary btn-sm p-1 text-2xl"
+              class="btn btn-outline btn-primary btn-circle"
             >
-              <Icon icon="mdi-arrow-right" class="w-full h-full" />
+              <Icon icon="mdi-arrow-right" class="text-2xl" />
             </RouterLink>
           </div>
-        </h2>
-        <div>
-          <DynamicComponent :value="current.block_id" />
         </div>
+        <div class="divider"></div>
+        <h3 class="text-xl font-semibold text-base-content mb-3">{{ $t('block.block_id') }}</h3>
+        <DynamicComponent :value="current.block_id" class="bg-base-200 p-4 rounded-lg" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">
-          {{ $t('block.block_header') }}
-        </h2>
-        <DynamicComponent :value="current.block?.header" />
+      <div class="card bg-base-100 shadow-xl rounded-box p-6 mb-6">
+        <h3 class="text-xl font-semibold text-base-content mb-3">{{ $t('block.block_header') }}</h3>
+        <DynamicComponent :value="current.block?.header" class="bg-base-200 p-4 rounded-lg" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title flex flex-row justify-between">
-          {{ $t('account.transactions') }}
-        </h2>
-        <TxsElement :value="current.block?.data?.txs" />
+      <div class="card bg-base-100 shadow-xl rounded-box p-6 mb-6">
+        <h3 class="text-xl font-semibold text-base-content mb-3">{{ $t('account.transactions') }}</h3>
+        <TxsElement :value="current.block?.data?.txs" class="bg-base-200 p-4 rounded-lg" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-        <h2 class="card-title flex flex-row justify-between">
-          {{ $t('block.last_commit') }}
-        </h2>
-        <DynamicComponent :value="current.block?.last_commit" />
+      <div class="card bg-base-100 shadow-xl rounded-box p-6">
+        <h3 class="text-xl font-semibold text-base-content mb-3">{{ $t('block.last_commit') }}</h3>
+        <DynamicComponent :value="current.block?.last_commit" class="bg-base-200 p-4 rounded-lg" />
       </div>
     </div>
   </div>

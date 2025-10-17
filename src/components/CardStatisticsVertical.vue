@@ -22,32 +22,32 @@ const isPositive = controlledComputed(
 </script>
 
 <template>
-  <div class="bg-base-100 shadow rounded p-4">
-    <div class="flex items-center justify-center">
-      <div v-if="props.icon" class="relative w-9 h-9 rounded overflow-hidden flex items-center justify-center">
-        <Icon :class="[`text-${props?.color}`]" :icon="props.icon" size="32" />
-        <div class="absolute top-0 left-0 bottom-0 right-0 opacity-20" :class="[`bg-${props?.color}`]"></div>
+  <div class="card bg-base-100 shadow-lg rounded-box p-6 text-center">
+    <div class="card-body p-0">
+      <div class="flex flex-col items-center justify-center mb-4">
+        <div v-if="props.icon" class="relative w-12 h-12 rounded-full flex items-center justify-center mb-2"
+             :class="[`bg-${props?.color}/20`, `text-${props?.color}`]">
+          <Icon :icon="props.icon" class="text-3xl" />
+        </div>
+
+        <div
+          v-if="props.change"
+          :class="isPositive ? 'text-success' : 'text-error'"
+          class="flex items-center text-sm font-semibold"
+        >
+          <span>{{ isPositive ? `+${props.change}` : props.change }}%</span>
+          <Icon :icon="isPositive ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'" class="ml-1" />
+        </div>
       </div>
 
-      <div
-        v-if="props.change"
-        :class="isPositive ? 'text-success' : 'text-error'"
-        class="flex items-center text-sm font-semibold"
-      >
-        <span>{{ isPositive ? `+${props.change}` : props.change }}%</span>
-        <Icon :icon="isPositive ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
-      </div>
-    </div>
-
-    <div class="">
-      <h6 class="text-lg text-center font-semibold mt-2 mb-1">
+      <h3 class="text-2xl font-bold text-base-content mb-1">
         {{ props.stats || '-' }}
-      </h6>
-      <p class="text-sm text-center">
+      </h3>
+      <p class="text-sm text-neutral-content">
         {{ props.title }}
       </p>
 
-      <div v-if="props.subtitle" size="x-small" class="font-semibold">
+      <div v-if="props.subtitle" class="text-xs font-medium text-neutral-content mt-2">
         <span class="truncate">{{ props.subtitle }}</span>
       </div>
     </div>

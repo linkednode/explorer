@@ -35,93 +35,74 @@ const featured = computed(() => {
 const chainStore = useBlockchain();
 </script>
 <template>
-  <div class="">
-    <div
-      class="flex md:!flex-row flex-col items-center justify-center mb-6 mt-14 gap-2"
-    >
-      <div class="w-16 rounded-full">
-        <svg
-          version="1.0"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 150.000000 132.000000"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <g
-            transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)"
-            :fill="chainStore.current?.themeColor || '#666CFF'"
-            class="dark:invert"
-            stroke="none"
-          >
-            <path
-              d="M500 1310 l-125 -5 -182 -315 c-100 -173 -182 -321 -182 -329 -1 -7
-            81 -159 181 -337 l183 -324 372 0 371 0 186 325 c102 179 186 330 186 337 0 7
-            -82 157 -182 335 l-183 323 -250 -2 c-137 -1 -306 -5 -375 -8z m588 -454 c61
-            -106 112 -197 112 -201 0 -4 -50 -95 -111 -201 l-112 -194 -231 0 -231 0 -105
-            181 c-58 100 -109 190 -114 200 -6 14 17 63 104 213 l112 196 232 0 231 0 113
-            -194z"
-            />
-            <path
-              d="M591 1001 l-54 -6 -87 -150 -88 -150 176 -3 c97 -1 181 -1 187 2 9 3
-            165 267 183 308 4 9 -233 7 -317 -1z"
-            />
-            <path
-              d="M872 824 l-90 -159 36 -66 c113 -201 147 -258 153 -251 8 8 179 302
-            179 307 0 2 -37 68 -83 147 -46 78 -88 151 -94 162 -9 16 -24 -5 -101 -140z"
-            />
-            <path
-              d="M360 625 c0 -7 148 -263 172 -297 l19 -28 186 0 c101 0 183 3 181 8
-            -1 4 -43 78 -93 165 l-90 157 -187 0 c-104 0 -188 -2 -188 -5z"
-            />
-          </g>
-        </svg>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Hero Section -->
+    <div class="text-center mb-12 bg-base-100 p-8 rounded-box shadow-xl">
+      <div class="flex flex-col items-center justify-center mb-6">
+        <div class="w-24 h-24 mb-4">
+          <img src="../assets/logo.svg" alt="LinkedNode Logo" class="w-full h-full object-contain animate-bounce-slow" />
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold text-primary mb-3 leading-tight">
+          {{ $t('pages.title') }}
+        </h1>
+        <p class="text-lg text-neutral-content max-w-2xl mx-auto">
+          {{ $t('pages.slogan') }}
+        </p>
       </div>
-      <h1 class="text-primary dark:text-white text-3xl md:!text-6xl font-bold">
-        {{ $t('pages.title') }}
-      </h1>
-    </div>
-    <div class="text-center text-base">
-      <p class="mb-1">
-        {{ $t('pages.slogan') }}
-      </p>
-    </div>
-    <div v-if="dashboard.status !== LoadingStatus.Loaded" class="flex justify-center">
-      <progress class="progress progress-info w-80 h-1"></progress>
+      <div v-if="dashboard.status !== LoadingStatus.Loaded" class="flex justify-center mt-6">
+        <progress class="progress progress-primary w-96 h-2"></progress>
+      </div>
     </div>
 
-    <div v-if="featured.length > 0" class="text-center text-base mt-6 text-primary">
-      <h2 class="mb-6">Featured Blockchains 🔥</h2>
+    <!-- Featured Blockchains Section -->
+    <div v-if="featured.length > 0" class="mb-12">
+      <h2 class="text-3xl font-bold text-center text-base-content mb-8">Featured Blockchains 🔥</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <ChainSummary v-for="(chain, index) in featured" :key="index" :name="chain.chainName" class="transform hover:scale-105 transition-transform duration-200" />
+      </div>
     </div>
 
-    <div
-      v-if="featured.length > 0"
-      class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5"
-    >
-      <ChainSummary v-for="(chain, index) in featured" :key="index" :name="chain.chainName" />
-    </div>
+    <!-- Search and All Blockchains Section -->
+    <div class="bg-base-100 p-8 rounded-box shadow-xl">
+      <h2 class="text-3xl font-bold text-center text-base-content mb-8">{{ $t('pages.description') }}</h2>
 
-    <div class="text-center text-base mt-6 text-primary">
-      <h2 class="mb-6">{{ $t('pages.description') }}</h2>
-    </div>
+      <div class="form-control mb-8">
+        <div class="input-group justify-center">
+          <input
+            type="text"
+            :placeholder="$t('pages.search_placeholder')"
+            class="input input-bordered input-primary w-full max-w-md"
+            v-model="keywords"
+          />
+          <button class="btn btn-primary">
+            <Icon icon="mdi:magnify" class="text-2xl" />
+          </button>
+        </div>
+        <div class="text-center text-sm text-neutral-content mt-2">
+          {{ chains.length }} / {{ dashboard.length }} {{ $t('pages.chains_found') }}
+        </div>
+      </div>
 
-    <div class="flex items-center rounded-lg bg-base-100 border border-gray-200 dark:border-gray-700 mt-10">
-      <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
-      <input
-        :placeholder="$t('pages.search_placeholder')"
-        class="px-4 h-10 bg-transparent flex-1 outline-none text-base"
-        v-model="keywords"
-      />
-      <div class="px-4 text-base hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
-    </div>
-
-    <div class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5">
-      <ChainSummary v-for="(chain, index) in chains" :key="index" :name="chain.chainName" />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <ChainSummary v-for="(chain, index) in chains" :key="index" :name="chain.chainName" class="transform hover:scale-105 transition-transform duration-200" />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.logo path {
-  fill: #171d30;
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite ease-in-out;
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
 }
 </style>
-@/components/ad/ad
