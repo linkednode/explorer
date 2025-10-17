@@ -90,7 +90,10 @@ const status = computed(() => {
 
 const deposit = ref({} as PaginatedProposalDeposit);
 store.fetchProposalDeposits(props.proposal_id).then((x) => {
-  deposit.value = x || { deposits: [], pagination: {} }; // Provide default
+  deposit.value = x || { deposits: [], pagination: {} };
+  if (!deposit.value.deposits || deposit.value.deposits.length === 0) {
+    deposit.value.deposits = [{ amount: [], proposal_id: '', depositor: '' }];
+  }
 });
 
 const votes = ref([] as GovVote[]); // Initialize as empty array

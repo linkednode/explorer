@@ -47,8 +47,14 @@ function shortName(name: string, id: string) {
   return name.toLowerCase().startsWith('ibc/') || name.toLowerCase().startsWith('0x') ? id : name;
 }
 
-const comLinks = computed(() => {
-  return [
+interface ComLink {
+  name: string;
+  icon: string;
+  href: string;
+}
+
+const comLinks = computed<ComLink[]>(() => {
+  const links = [
     {
       name: 'Website',
       icon: 'mdi-web',
@@ -70,6 +76,7 @@ const comLinks = computed(() => {
       href: store.github,
     },
   ];
+  return links.filter(item => item.href);
 });
 
 // wallet box
@@ -138,12 +145,11 @@ const amount = computed({
 
           <div class="flex flex-wrap gap-2 mb-6">
             <a
-              v-for="(item, index) of comLinks"
+              v-for="(item, index) of (comLinks as ComLink[])"
               :key="index"
               :href="item.href"
               target="_blank"
               class="btn btn-sm btn-outline btn-primary gap-2"
-              v-if="item.href"
             >
               <Icon :icon="item?.icon" class="text-lg" />
               <span class="uppercase">{{ item?.name }}</span>

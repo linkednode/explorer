@@ -81,7 +81,7 @@ export interface PaginatedProposalDeposit extends PaginatedResponse {
     amount: Coin[];
     proposal_id: string;
     depositor: string;
-  };
+  }[];
 }
 
 export interface PaginatedProposalVotes extends PaginatedResponse {

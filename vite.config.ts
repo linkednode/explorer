@@ -13,6 +13,8 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 export default defineConfig({
   define: {
     'process.env': {},
+    __dirname: JSON.stringify(fileURLToPath(new URL('.', import.meta.url))),
+    __filename: JSON.stringify(fileURLToPath(import.meta.url)),
   },
   plugins: [
     vue({
@@ -44,7 +46,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      crypto: 'crypto-browserify',
     },
+  },
+  build: {
+    target: 'es2022',
   },
   optimizeDeps: {
     entries: ['./src/**/*.vue'],
