@@ -14,7 +14,7 @@
         "base": "mpx",
         "symbol": "PX",
         "exponent": "18", 
-        "coingecko_id": "",
+        "coingecko_id": "crossfi-2",
         "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/crossfi.jpg"
     }]
 }

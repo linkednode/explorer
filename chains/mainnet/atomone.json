@@ -14,7 +14,7 @@
         "base": "uatone",
         "symbol": "ATONE",
         "exponent": "6", 
-        "coingecko_id": "",
+        "coingecko_id": "atomone",
         "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/atomone.png"
     }]
 }

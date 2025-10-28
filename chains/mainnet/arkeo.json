@@ -22,6 +22,7 @@
         "base": "uarkeo",
         "symbol": "ARKEO",
         "exponent": "8",
+        "coingecko_id": "arkeo",
         "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/arkeo.jpg"
     }]
 }

@@ -3,14 +3,16 @@
     "registry_name": "selfchain",
     "api": [
 
-        {"provider": "Selfchain", "address": "https://api.selfchain.io/"},
-        {"provider": "Indonode", "address": "https://api.selfchain.indonode.net"}
+        {"provider": "Selfchain", "address": "https://api.selfchain.io"},
+        {"provider": "Indonode", "address": "https://api.selfchain.indonode.net"},
+        {"provider": "KonsorTech", "address": "https://mainnet-selfchain-api.konsortech.xyz"}
 
 
     ],
     "rpc": [
-        {"provider": "Nodestake", "address": "https://rpc.selfchain.io/"},
-        {"provider": "Indonode", "address": "https://rpc.selfchain.indonode.net"}
+        {"provider": "Nodestake", "address": "https://rpc.selfchain.io"},
+        {"provider": "Indonode", "address": "https://rpc.selfchain.indonode.net"},
+        {"provider": "KonsorTech", "address": "https://mainnet-selfchain-rpc.konsortech.xyz"}
     ],
     "sdk_version": "0.47.10",
     "coin_type": "118",
@@ -22,6 +24,7 @@
         "base": "uslf",
         "symbol": "SLF",
         "exponent": "6",
+        "coingecko_id": "self-chain",
         "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg"
     }]
 }
