@@ -5,7 +5,7 @@ import {
   useDashboard,
   useBlockchain,
 } from '@/stores';
-import type { ChainConfig } from '@/types/chaindata';
+import type { ChainConfig, DenomUnit } from '@/types/chaindata';
 import { NetworkType } from '@/types/chaindata';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
@@ -157,38 +157,43 @@ function suggest() {
 </script>
 
 <template>
-  <div class="bg-base-100 p-4 rounded text-center">
-    <div class="flex text-center">
-      <select v-model="network" class="select select-bordered">
+  <div class="bg-base-100 shadow-md rounded-box p-4 text-center">
+    <AdBanner id="keplr-banner-ad" unit="banner" width="970px" height="90px" />
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 my-6">
+      <select v-model="network" class="select select-bordered w-full max-w-xs bg-base-200 text-base-content">
         <option :value="NetworkType.Mainnet">Mainnet</option>
         <option :value="NetworkType.Testnet">Testnet</option>
       </select>
-      <select v-model="selected" class="select select-bordered mx-5" @change="onchange">
-        <option v-for="c in chains" :value="c">
+      <select v-model="selected" class="select select-bordered w-full max-w-xs bg-base-200 text-base-content" @change="onchange">
+        <option v-for="c in chains" :value="c" :key="c.chainName">
           {{ c.chainName }}
         </option>
       </select>
-      <label
-        ><input type="radio" v-model="wallet" value="keplr" class="radio radio-bordered" @change="onchange" />
-        Keplr</label
-      >
-      <label
-        ><input type="radio" v-model="wallet" value="metamask" class="radio radio-bordered ml-4" @change="onchange" />
-        Metamask</label
-      >
+      <div class="flex items-center gap-4">
+        <label class="flex items-center cursor-pointer">
+          <input type="radio" v-model="wallet" value="keplr" class="radio radio-primary" @change="onchange" />
+          <span class="ml-2 text-base-content">Keplr</span>
+        </label>
+        <label class="flex items-center cursor-pointer">
+          <input type="radio" v-model="wallet" value="metamask" class="radio radio-primary" @change="onchange" />
+          <span class="ml-2 text-base-content">Metamask</span>
+        </label>
+      </div>
     </div>
-    <div class="text-main mt-5">
-      <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text text-base-content">{{ $t('wallet.config_json') }}</span>
+      </label>
+      <textarea v-model="conf" class="textarea textarea-bordered h-64 bg-base-200 text-base-content font-mono text-xs" readonly></textarea>
     </div>
-    <div class="mt-4 mb-4">
-      <button class="btn !bg-primary !border-primary text-white mr-2" @click="suggest">
+    <div class="mt-6">
+      <button class="btn btn-primary capitalize text-primary-content mr-2" @click="suggest">
         Suggest {{ selected.chainName }} TO {{ wallet }}
       </button>
 
-      <div class="mt-4">
-        If the chain is not offically support on Keplr/Metamask Snap, you can submit these parameters to enable
-        Keplr/Metamask Snap.
-      </div>
+      <p class="text-sm text-neutral-content mt-4">
+        {{ $t('wallet.suggest_info') }}
+      </p>
     </div>
 
     <AdBanner id="suggest-banner-ad" unit="banner" width="970px" height="90px" />

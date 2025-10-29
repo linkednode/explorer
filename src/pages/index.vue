@@ -48,7 +48,7 @@ const chainStore = useBlockchain();
         >
           <g
             transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)"
-            :fill="chainStore.current?.themeColor || '#666CFF'"
+            :fill="chainStore.current?.themeColor || 'hsl(var(--p))'"
             class="dark:invert"
             stroke="none"
           >
@@ -75,11 +75,11 @@ const chainStore = useBlockchain();
           </g>
         </svg>
       </div>
-      <h1 class="text-primary dark:text-white text-3xl md:!text-6xl font-bold">
+      <h1 class="text-primary text-3xl md:!text-6xl font-bold">
         {{ $t('pages.title') }}
       </h1>
     </div>
-    <div class="text-center text-base">
+    <div class="text-center text-base text-base-content">
       <p class="mb-1">
         {{ $t('pages.slogan') }}
       </p>
@@ -88,7 +88,7 @@ const chainStore = useBlockchain();
       <progress class="progress progress-info w-80 h-1"></progress>
     </div>
 
-    <div v-if="featured.length > 0" class="text-center text-base mt-6 text-primary">
+    <div v-if="featured.length > 0" class="text-center text-xl font-semibold mt-6 text-base-content">
       <h2 class="mb-6">Featured Blockchains 🔥</h2>
     </div>
 
@@ -99,18 +99,18 @@ const chainStore = useBlockchain();
       <ChainSummary v-for="(chain, index) in featured" :key="index" :name="chain.chainName" />
     </div>
 
-    <div class="text-center text-base mt-6 text-primary">
+    <div class="text-center text-xl font-semibold mt-6 text-base-content">
       <h2 class="mb-6">{{ $t('pages.description') }}</h2>
     </div>
 
-    <div class="flex items-center rounded-lg bg-base-100 border border-gray-200 dark:border-gray-700 mt-10">
-      <Icon icon="mdi:magnify" class="text-2xl text-gray-400 ml-3" />
+    <div class="flex items-center rounded-box bg-base-100 border border-base-300 shadow-sm mt-10">
+      <Icon icon="mdi:magnify" class="text-2xl text-neutral-content ml-3" />
       <input
         :placeholder="$t('pages.search_placeholder')"
-        class="px-4 h-10 bg-transparent flex-1 outline-none text-base"
+        class="px-4 h-10 bg-transparent flex-1 outline-none text-base text-base-content placeholder-neutral-content"
         v-model="keywords"
       />
-      <div class="px-4 text-base hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
+      <div class="px-4 text-base text-neutral-content hidden md:!block">{{ chains.length }}/{{ dashboard.length }}</div>
     </div>
 
     <div class="grid grid-cols-1 gap-4 mt-6 md:!grid-cols-3 lg:!grid-cols-4 2xl:!grid-cols-5">
@@ -121,7 +121,7 @@ const chainStore = useBlockchain();
 
 <style scoped>
 .logo path {
-  fill: #171d30;
+  fill: hsl(var(--p));
 }
 </style>
 @/components/ad/ad

@@ -84,16 +84,16 @@ const show_ad = computed(() => {
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#171d30]">
+  <div class="bg-base-200 text-base-content">
     <!-- sidebar -->
     <div
-      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
+      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-base-300"
       :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
     >
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center">
           <img class="w-10 h-10" src="../../assets/home.svg" />
-          <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
+          <h1 class="flex-1 ml-3 text-2xl font-semibold text-primary">
             linkednode
           </h1>
         </RouterLink>
@@ -117,19 +117,19 @@ const show_ad = computed(() => {
         >
           <input v-if="index > 0" type="checkbox" class="cursor-pointer !h-10 block" @click="changeOpen(index)" />
           <div
-            class="collapse-title !py-0 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+            class="collapse-title !py-0 px-4 flex items-center cursor-pointer hover:bg-base-200"
           >
             <Icon
               v-if="item?.icon?.icon"
               :icon="item?.icon?.icon"
               class="text-xl mr-2"
               :class="{
-                'text-yellow-500': item?.title === 'Favorite',
-                'text-blue-500': item?.title !== 'Favorite',
+                'text-warning': item?.title === 'Favorite',
+                'text-info': item?.title !== 'Favorite',
               }"
             />
             <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full mr-3" />
-            <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
+            <div class="text-base capitalize flex-1 text-base-content whitespace-nowrap">
               {{ item?.title }}
             </div>
             <div
@@ -145,7 +145,7 @@ const show_ad = computed(() => {
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-base-200 rounded cursor-pointer px-3 py-2 flex items-center"
                 :class="{
                   '!bg-primary': selected($route, el),
                 }"
@@ -164,11 +164,11 @@ const show_ad = computed(() => {
                   :src="el?.icon?.image"
                   class="w-6 h-6 rounded-full mr-3 ml-4"
                   :class="{
-                    'border border-gray-300 bg-white': selected($route, el),
+                    'border border-base-300 bg-base-100': selected($route, el),
                   }"
                 />
                 <div
-                  class="text-base capitalize text-gray-500 dark:text-gray-300"
+                  class="text-base capitalize text-base-content"
                   :class="{
                     '!text-white': selected($route, el),
                   }"
@@ -182,11 +182,11 @@ const show_ad = computed(() => {
               class="menu bg-base-100 w-full !p-0"
             >
               <RouterLink
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-base-200 rounded cursor-pointer px-3 py-2 flex items-center"
                 :to="`/${blockchain.chainName}/faucet`"
               >
                 <Icon icon="mdi:chevron-right" class="mr-2 ml-3"></Icon>
-                <div class="text-base capitalize text-gray-500 dark:text-gray-300">Faucet</div>
+                <div class="text-base capitalize text-base-content">Faucet</div>
                 <div class="badge badge-sm text-white border-none badge-error ml-auto">New</div>
               </RouterLink>
             </div>
@@ -197,23 +197,23 @@ const show_ad = computed(() => {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-base-200"
         >
           <Icon
             v-if="item?.icon?.icon"
             :icon="item?.icon?.icon"
             class="text-xl mr-2"
             :class="{
-              'text-yellow-500': item?.title === 'Favorite',
-              'text-blue-500': item?.title !== 'Favorite',
+              'text-warning': item?.title === 'Favorite',
+              'text-info': item?.title !== 'Favorite',
             }"
           />
           <img
             v-if="item?.icon?.image"
             :src="item?.icon?.image"
-            class="w-6 h-6 rounded-full mr-3 border border-blue-100"
+            class="w-6 h-6 rounded-full mr-3 border border-base-300"
           />
-          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
+          <div class="text-base capitalize flex-1 text-base-content whitespace-nowrap">
             {{ item?.title }}
           </div>
           <div
@@ -226,59 +226,59 @@ const show_ad = computed(() => {
         </RouterLink>
         <div
           v-if="isNavTitle(item)"
-          class="px-4 text-sm text-gray-400 pb-2 uppercase"
+          class="px-4 text-sm text-neutral-content pb-2 uppercase"
         >
           {{ item?.heading }}
         </div>
       </div>
       <div class="px-2">
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Tools</div>
+        <div class="px-4 text-sm pt-2 text-neutral-content pb-2 uppercase">Tools</div>
         <RouterLink
           to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Wallet Helper</div>
+          <div class="text-base capitalize flex-1 text-base-content">Wallet Helper</div>
         </RouterLink>
         <div
           v-if="showDiscord"
-          class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase"
+          class="px-4 text-sm pt-2 text-neutral-content pb-2 uppercase"
         >
           {{ $t('module.sponsors') }}
         </div>
         <Sponsors v-if="showDiscord" />
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
+        <div class="px-4 text-sm pt-2 text-neutral-content pb-2 uppercase">{{ $t('module.links') }}</div>
         <a
           href="https://twitter.com/ping_pub"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200"
         >
           <Icon icon="mdi:twitter" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Twitter</div>
+          <div class="text-base capitalize flex-1 text-base-content">Twitter</div>
         </a>
         <a
           v-if="showDiscord"
           href="https://discord.com/invite/CmjYVSr6GW"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-base-200"
         >
           <Icon icon="mdi:discord" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Discord</div>
+          <div class="text-base capitalize flex-1 text-base-content">Discord</div>
         </a>
         <a
           href="https://github.com/ping-pub/explorer/discussions"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-base-200"
         >
           <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">FAQ</div>
+          <div class="text-base capitalize flex-1 text-base-content">FAQ</div>
         </a>
       </div>
     </div>
     <div class="xl:!ml-64 px-3 pt-4">
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
+        class="flex items-center py-3 bg-base-100 shadow-md mb-4 rounded-box px-4 sticky top-0 z-10"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"

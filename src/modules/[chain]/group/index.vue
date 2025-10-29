@@ -8,5 +8,7 @@ console.log(x);
 console.log(op);
 </script>
 <template>
-  <div>address:</div>
+  <div class="bg-base-100 shadow-md rounded-box p-4 mb-4 text-base-content">
+    <div>address:</div>
+  </div>
 </template>

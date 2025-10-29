@@ -215,21 +215,21 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
 
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
       <h2
-        class="card-title flex flex-col md:!justify-between md:!flex-row mb-2"
+        class="text-xl font-semibold flex flex-col md:!justify-between md:!flex-row mb-2 text-base-content"
       >
         <p class="truncate w-full">
           {{ proposal_id }}. {{ proposal.title || proposal.content?.title || metaItem(proposal?.metadata)?.title }}
         </p>
         <div
-          class="badge badge-ghost"
-          :class="color === 'success' ? 'text-yes' : color === 'error' ? 'text-no' : 'text-info'"
+          class="badge badge-outline"
+          :class="color === 'success' ? 'badge-success' : color === 'error' ? 'badge-error' : 'badge-info'"
         >
           {{ status }}
         </div>
       </h2>
-      <div class="">
+      <div class="text-base-content">
         <ObjectElement :value="proposal.content" />
       </div>
       <div v-if="(proposal.summary && !proposal.content?.description) || metaItem(proposal?.metadata)?.summary">
@@ -240,27 +240,26 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
             )
           "
           previewOnly
-          class="md-editor-recover"
+          class="md-editor-recover text-base-content"
         ></MdEditor>
       </div>
     </div>
-    <!-- grid lg:!!grid-cols-3 auto-rows-max-->
-    <!-- flex-col lg:!!flex-row flex -->
-    <div class="gap-4 mb-4 grid lg:!!grid-cols-3 auto-rows-max">
+    <!-- grid lg:grid-cols-3 auto-rows-max-->
+    <div class="gap-4 mb-4 grid lg:grid-cols-3 auto-rows-max">
       <!-- flex-1 -->
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-        <h2 class="card-title mb-1">{{ $t('gov.tally') }}</h2>
+      <div class="bg-base-100 px-4 pt-3 pb-4 rounded-box shadow-md">
+        <h2 class="text-xl font-semibold mb-1 text-base-content">{{ $t('gov.tally') }}</h2>
         <div class="mb-1" v-for="(item, index) of processList" :key="index">
-          <label class="block text-sm mb-1">{{ item.name }}</label>
+          <label class="block text-sm mb-1 text-neutral-content">{{ item.name }}</label>
           <div class="h-5 w-full relative">
-            <div class="absolute inset-x-0 inset-y-0 w-full opacity-10 rounded-sm" :class="`${item.class}`"></div>
+            <div class="absolute inset-x-0 inset-y-0 w-full opacity-10 rounded-full" :class="`${item.class}`"></div>
             <div
-              class="absolute inset-x-0 inset-y-0 rounded-sm"
+              class="absolute inset-x-0 inset-y-0 rounded-full"
               :class="`${item.class}`"
               :style="`width: ${item.value === '-' || item.value === 'NaN%' ? '0%' : item.value}`"
             ></div>
             <p
-              class="absolute inset-x-0 inset-y-0 text-center text-sm text-[#666] dark:text-[#eee] flex items-center justify-center"
+              class="absolute inset-x-0 inset-y-0 text-center text-sm text-base-content flex items-center justify-center"
             >
               {{ item.value }}
             </p>
@@ -269,34 +268,34 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
         <div class="mt-6 grid grid-cols-2">
           <label
             for="vote"
-            class="btn btn-primary float-right btn-sm mx-1"
+            class="btn btn-primary float-right btn-sm mx-1 text-primary-content rounded-btn"
             @click="dialog.open('vote', { proposal_id })"
             >{{ $t('gov.btn_vote') }}</label
           >
           <label
             for="deposit"
-            class="btn btn-primary float-right btn-sm mx-1"
+            class="btn btn-primary float-right btn-sm mx-1 text-primary-content rounded-btn"
             @click="dialog.open('deposit', { proposal_id })"
             >{{ $t('gov.btn_deposit') }}</label
           >
         </div>
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-5 rounded shadow lg:!!col-span-2">
-        <h2 class="card-title">{{ $t('gov.timeline') }}</h2>
+      <div class="bg-base-100 px-4 pt-3 pb-5 rounded-box shadow-md lg:!col-span-2">
+        <h2 class="text-xl font-semibold text-base-content">{{ $t('gov.timeline') }}</h2>
 
         <div class="px-1">
           <div class="flex items-center mb-4 mt-2">
             <div class="w-2 h-2 rounded-full bg-error mr-3"></div>
-            <div class="text-base flex-1 text-main">
+            <div class="text-base flex-1 text-base-content">
               {{ $t('gov.submit_at') }}:
               {{ format.toDay(proposal.submit_time) }}
             </div>
-            <div class="text-sm">{{ shortTime(proposal.submit_time) }}</div>
+            <div class="text-sm text-neutral-content">{{ shortTime(proposal.submit_time) }}</div>
           </div>
           <div class="flex items-center mb-4">
             <div class="w-2 h-2 rounded-full bg-primary mr-3"></div>
-            <div class="text-base flex-1 text-main">
+            <div class="text-base flex-1 text-base-content">
               {{ $t('gov.deposited_at') }}:
               {{
                 format.toDay(
@@ -306,7 +305,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 )
               }}
             </div>
-            <div class="text-sm">
+            <div class="text-sm text-neutral-content">
               {{
                 shortTime(
                   proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'
@@ -318,31 +317,31 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
           </div>
           <div class="mb-4">
             <div class="flex items-center">
-              <div class="w-2 h-2 rounded-full bg-yes mr-3"></div>
-              <div class="text-base flex-1 text-main">
+              <div class="w-2 h-2 rounded-full bg-success mr-3"></div>
+              <div class="text-base flex-1 text-base-content">
                 {{ $t('gov.vote_start_from') }}
                 {{ format.toDay(proposal.voting_start_time) }}
               </div>
-              <div class="text-sm">
+              <div class="text-sm text-neutral-content">
                 {{ shortTime(proposal.voting_start_time) }}
               </div>
             </div>
-            <div class="pl-5 text-sm mt-2">
+            <div class="pl-5 text-sm mt-2 text-neutral-content">
               <Countdown :time="votingCountdown" />
             </div>
           </div>
           <div>
             <div class="flex items-center mb-1">
               <div class="w-2 h-2 rounded-full bg-success mr-3"></div>
-              <div class="text-base flex-1 text-main">
+              <div class="text-base flex-1 text-base-content">
                 {{ $t('gov.vote_end') }}
                 {{ format.toDay(proposal.voting_end_time) }}
               </div>
-              <div class="text-sm">
+              <div class="text-sm text-neutral-content">
                 {{ shortTime(proposal.voting_end_time) }}
               </div>
             </div>
-            <div class="pl-5 text-sm">
+            <div class="pl-5 text-sm text-neutral-content">
               {{ $t('gov.current_status') }}:
               {{ $t(`gov.proposal_statuses.${proposal.status}`) }}
             </div>
@@ -351,16 +350,16 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
           <div class="mt-4" v-if="proposal?.content?.['@type']?.endsWith('SoftwareUpgradeProposal')">
             <div class="flex items-center">
               <div class="w-2 h-2 rounded-full bg-warning mr-3"></div>
-              <div class="text-base flex-1 text-main">
+              <div class="text-base flex-1 text-base-content">
                 {{ $t('gov.upgrade_plan') }}:
                 <span v-if="Number(proposal.content?.plan?.height || '0') > 0"> (EST)</span>
                 <span v-else>{{ format.toDay(proposal.content?.plan?.time) }}</span>
               </div>
-              <div class="text-sm">
+              <div class="text-sm text-neutral-content">
                 {{ shortTime(proposal.voting_end_time) }}
               </div>
             </div>
-            <div class="pl-5 text-sm mt-2">
+            <div class="pl-5 text-sm mt-2 text-neutral-content">
               <Countdown :time="upgradeCountdown" />
             </div>
           </div>
@@ -368,34 +367,34 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title">{{ $t('gov.votes') }}</h2>
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
+      <h2 class="text-xl font-semibold text-base-content">{{ $t('gov.votes') }}</h2>
       <div class="overflow-x-auto">
         <table class="table w-full table-zebra">
           <tbody>
             <tr v-for="(item, index) of votes" :key="index">
-              <td class="py-2 text-sm">{{ showValidatorName(item.voter) }}</td>
+              <td class="py-2 text-sm text-base-content">{{ showValidatorName(item.voter) }}</td>
               <td
                 v-if="item.option && item.option !== 'VOTE_OPTION_UNSPECIFIED'"
-                class="py-2 text-sm"
+                class="py-2 text-sm text-base-content"
                 :class="{
-                  'text-yes': item.option === 'VOTE_OPTION_YES',
-                  'text-gray-400': item.option === 'VOTE_OPTION_ABSTAIN',
+                  'text-success': item.option === 'VOTE_OPTION_YES',
+                  'text-neutral-content': item.option === 'VOTE_OPTION_ABSTAIN',
                 }"
               >
                 {{ String(item.option).replace('VOTE_OPTION_', '') }}
               </td>
-              <td v-if="item.options" class="py-2 text-sm">
+              <td v-if="item.options" class="py-2 text-sm text-base-content">
                 {{
                   item.options
-                    .map((x) => `${x.option.replace('VOTE_OPTION_', '')}:${format.percent(x.weight)}`)
+                    .map((x: { option: string; weight: string }) => `${x.option.replace('VOTE_OPTION_', '')}:${format.percent(x.weight)}`)
                     .join(', ')
                 }}
               </td>
             </tr>
           </tbody>
         </table>
-        <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
+        <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" class="mt-4" />
       </div>
     </div>
   </div>

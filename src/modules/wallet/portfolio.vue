@@ -241,98 +241,108 @@ const currencySign = computed(() => {
 });
 </script>
 <template>
-  <div class="overflow-x-auto w-full rounded-md">
-    <div class="flex flex-wrap justify-between bg-base-100 p-5">
-      <div class="min-w-0">
-        <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">Portfolio</h2>
-        <div>
-          <div class="flex items-center text-sm">
-            Currency:
-            <select v-model="currency" @change="loadPrice" class="ml-1 uppercase">
-              <option>usd</option>
-              <option>cny</option>
-              <option>eur</option>
-              <option>hkd</option>
-              <option>jpy</option>
-              <option>sgd</option>
-              <option>krw</option>
-              <option>btc</option>
-              <option>eth</option>
-            </select>
-          </div>
+  <div class="bg-base-100 shadow-md rounded-box p-4">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+      <div class="min-w-0 flex-1">
+        <h2 class="text-2xl font-bold leading-7 text-base-content sm:truncate sm:text-3xl sm:tracking-tight">
+          {{ $t('wallet.portfolio_title') }}
+        </h2>
+        <div class="mt-1 flex items-center text-sm text-neutral-content">
+          {{ $t('wallet.currency') }}:
+          <select v-model="currency" @change="loadPrice" class="select select-ghost select-xs ml-1 uppercase bg-base-200 text-base-content">
+            <option>usd</option>
+            <option>cny</option>
+            <option>eur</option>
+            <option>hkd</option>
+            <option>jpy</option>
+            <option>sgd</option>
+            <option>krw</option>
+            <option>btc</option>
+            <option>eth</option>
+          </select>
         </div>
       </div>
-      <div class="text-right">
-        <div>Total Value</div>
-        <div class="text-success font-bold">
+      <div class="flex flex-col text-right mt-4 lg:mt-0">
+        <span class="text-neutral-content">{{ $t('wallet.total_value') }}</span>
+        <span class="text-2xl text-success font-bold">
           {{ currencySign }} {{ format.formatNumber(totalValue, '0,0.[00]') }}
-        </div>
-        <div
-          class="text-xs"
+        </span>
+        <span
+          class="text-sm"
           :class="{
             'text-success': totalChangeIn24 > 0,
             'text-error': totalChangeIn24 < 0,
           }"
         >
           {{ format.formatNumber(totalChangeIn24, '+0,0.[00]') }}
-        </div>
+        </span>
       </div>
     </div>
-    <div class="bg-base-100">
-      <div v-if="tokenList" class="grid grid-cols-1 md:grid-cols-3">
-        <div>
-          <DonutChart
-            height="280"
-            :series="Object.values(tokenValues)"
-            :labels="Object.keys(tokenValues).map((x) => format.tokenDisplayDenom(x)?.toUpperCase())"
-          />
-        </div>
-        <div class="md:col-span-2">
-          <ApexCharts
-            type="area"
-            height="280"
-            :options="chartConfig"
-            :series="changeData"
-          />
-        </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="md:col-span-1 bg-base-200 rounded-box p-4 shadow-sm">
+        <DonutChart
+          height="280"
+          :series="Object.values(tokenValues)"
+          :labels="Object.keys(tokenValues).map((x) => format.tokenDisplayDenom(x)?.toUpperCase())"
+        />
       </div>
-      <div class="overflow-x-auto mt-4">
-        <AdBanner class="bg-base-200" id="portfolio-banner-ad" unit="banner" width="970px" height="90px" />
-        <table class="table w-full">
-          <thead class="bg-base-200">
-            <tr>
-              <th>Token</th>
-              <th class="text-right">Value</th>
-              <th class="text-right">Percent</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(x, index) in tokenList" :key="index">
-              <td>
-                <div class="flex gap-1 text-xs items-center">
-                  <div class="avatar">
-                    <div class="mask mask-squircle w-6 h-6 mr-2">
-                      <img :src="x.logo" :alt="x.chainName" />
-                    </div>
+      <div class="md:col-span-2 bg-base-200 rounded-box p-4 shadow-sm">
+        <ApexCharts
+          type="area"
+          height="280"
+          :options="chartConfig"
+          :series="changeData"
+        />
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-6">
+      <AdBanner class="bg-base-200" id="portfolio-banner-ad" unit="banner" width="970px" height="90px" />
+      <table class="table w-full table-zebra">
+        <thead class="bg-base-200">
+          <tr>
+            <th class="text-left uppercase text-base-content font-semibold">{{ $t('wallet.token') }}</th>
+            <th class="text-right uppercase text-base-content font-semibold">{{ $t('wallet.value') }}</th>
+            <th class="text-right uppercase text-base-content font-semibold">{{ $t('wallet.percent') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(x, index) in tokenList" :key="index" class="hover:bg-base-200 transition-colors duration-200">
+            <td>
+              <div class="flex items-center gap-2">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-7 h-7">
+                    <img :src="x.logo" :alt="x.chainName" class="object-contain" />
                   </div>
-                  <span class="uppercase font-bold text-lg">{{ format.tokenDisplayDenom(x.denom) }}</span> @
-                  <span class="capitalize">{{ x.chainName }} </span>
                 </div>
-              </td>
-              <td class="text-right">
-                {{ currencySign }}{{ format.formatNumber(x.value, '0,0.[00]') }}
-              </td>
-              <td class="text-right">{{ format.percent(x.percentage) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="p-4 text-center" v-if="tokenList.length === 0">No Data</div>
+                <span class="uppercase font-bold text-base-content text-lg">{{ format.tokenDisplayDenom(x.denom) }}</span>
+                <span class="capitalize text-neutral-content text-sm">@ {{ x.chainName }} </span>
+              </div>
+            </td>
+            <td class="text-right text-base-content">
+              {{ currencySign }} {{ format.formatNumber(x.value, '0,0.[00]') }}
+            </td>
+            <td class="text-right text-neutral-content">{{ format.percent(x.percentage) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="text-center my-5 bg-base-200">
-      <RouterLink to="./accounts" class="btn btn-link"
-        >Add More Asset</RouterLink
-      >
+    <div class="p-4 text-center text-neutral-content" v-if="tokenList.length === 0">{{ $t('wallet.no_data') }}</div>
+
+    <div class="text-center my-6">
+      <RouterLink to="./accounts" class="btn btn-link capitalize text-primary">{{
+        $t('wallet.add_more_asset')
+      }}</RouterLink>
     </div>
   </div>
 </template>
+
+<route>
+    {
+      meta: {
+        i18n: 'portfolio',
+        order: 101
+      }
+    }
+</route>

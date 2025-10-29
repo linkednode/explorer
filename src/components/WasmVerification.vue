@@ -136,12 +136,8 @@ function selectTab(tabName: string) {
 
 const executions = computed(() => {
   return schemas.value
-    .filter((x) => x.path.indexOf('execute_msg') > -1 || x.path.indexOf('query_msg') > -1)
-    .map((x) => JSON.parse(x.sourceCode || '{}') as Schema);
-  // if(raw && raw.sourceCode) {
-  //   return JSON.parse(raw.sourceCode) as Schema
-  // }
-  // return {} as Schema
+    .filter((x: SourceCode<string>) => x.path.indexOf('execute_msg') > -1 || x.path.indexOf('query_msg') > -1)
+    .map((x: SourceCode<string>) => JSON.parse(x.sourceCode || '{}') as Schema);
 });
 
 const queries = computed(() => {
@@ -190,7 +186,7 @@ function callFunction(title: string, method: string, arg: Argument) {
 }
 </script>
 <template>
-  <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+  <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
     <div role="tablist" class="tabs tabs-boxed">
       <a role="tab" class="tab tooltip tooltip-right tooltip-success" data-tip="Powered By WELLDONE Studio">
         <div class="w-8 rounded">
@@ -207,7 +203,7 @@ function callFunction(title: string, method: string, arg: Argument) {
         >Source Code</a
       >
     </div>
-    <div class="">
+    <div class="mt-4">
       <div v-if="tab === 'verification'"><DynamicComponent :value="verification" /></div>
       <div v-if="tab === 'executions'" class="">
         <div v-for="{ title, oneOf } in executions" class="join join-vertical w-full mt-2">
@@ -217,29 +213,29 @@ function callFunction(title: string, method: string, arg: Argument) {
               class="collapse collapse-arrow join-item border border-base-300"
             >
               <input type="radio" name="my-accordion-1" :checked="false" />
-              <div class="collapse-title font-medium">{{ title }}::{{ method }}</div>
+              <div class="collapse-title font-semibold text-base-content">{{ title }}::{{ method }}</div>
               <div class="collapse-content">
                 <div v-for="(p, name) in props.properties" class="form-control pb-2">
                   <label class="label">
-                    <span class="label-text">{{ name }}</span>
+                    <span class="label-text text-neutral-content">{{ name }}</span>
                     <span></span>
                   </label>
                   <input
                     :name="`${method}-${name}`"
                     type="text"
                     :placeholder="p.format"
-                    class="input input-sm border border-gray-300 dark:border-gray-600 w-full"
+                    class="input input-sm input-bordered w-full"
                   />
                 </div>
                 <div>
                   <label
                     v-if="title === 'ExecuteMsg'"
                     for="wasm_execute_contract"
-                    class="btn btn-sm"
+                    class="btn btn-sm btn-primary"
                     @click="callFunction(title, method, props)"
                     >{{ method }}</label
                   >
-                  <label v-else class="btn btn-sm" @click="callFunction(title, method, props)">{{ method }}</label>
+                  <label v-else class="btn btn-sm btn-primary" @click="callFunction(title, method, props)">{{ method }}</label>
                 </div>
                 <div v-if="result[`${title}-${method}`]" class="mt-2">
                   <JsonViewer
@@ -263,13 +259,13 @@ function callFunction(title: string, method: string, arg: Argument) {
           class="collapse collapse-arrow join-item border border-base-300"
         >
           <input type="radio" name="sourceCodeAccordion" :checked="false" />
-          <div class="collapse-title font-medium">{{ sc.path }}</div>
+          <div class="collapse-title font-semibold text-base-content">{{ sc.path }}</div>
           <div class="collapse-content overflow-auto" v-html="sc.sourceCode"></div>
         </div>
       </div>
     </div>
     <div v-show="tab === 'verification'" class="text-center">
-      <div v-if="Object.keys(verification).length == 0">Haven't found verification</div>
+      <div v-if="Object.keys(verification).length == 0" class="text-neutral-content">Haven't found verification</div>
       <button
         class="btn btn-primary mt-5"
         @click="verify"
@@ -281,17 +277,17 @@ function callFunction(title: string, method: string, arg: Argument) {
     </div>
 
     <!-- alert-info -->
-    <div class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info">
-      <div class="drop-shadow-md px-4 pt-2 pb-2" style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px">
-        <h2 class="text-base font-semibold">{{ $t('consensus.tips') }}</h2>
+    <div class="alert alert-info shadow-md rounded-box mt-4">
+      <div class="px-4 pt-2 pb-2">
+        <h2 class="text-base font-semibold text-info-content">{{ $t('consensus.tips') }}</h2>
       </div>
       <div class="px-4 py-4">
-        <ul style="list-style-type: disc" class="pl-8">
+        <ul class="list-disc pl-8 text-info-content">
           <li>
             {{ $t('cosmwasm.tips_description_1') }}
           </li>
           <li>
-            <a href="https://docs.welldonestudio.io/code/verification-api/" target="_blank"
+            <a href="https://docs.welldonestudio.io/code/verification-api/" target="_blank" class="link link-hover text-info-content"
               >Link to Verification API Manual</a
             >
           </li>

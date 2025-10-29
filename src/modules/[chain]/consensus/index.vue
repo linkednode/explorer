@@ -151,90 +151,84 @@ async function update() {
 <template>
   <div>
     <!--  -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4">
       <div class="form-control">
         <label class="input-group input-group-md w-full flex">
-          <!-- <input
-            type="text"
-            placeholder="Button on both side"
-            class="input input-bordered input-md w-full"
-            v-model="rpc"
-          /> -->
-          <select v-model="rpc" class="select select-bordered w-full flex-1">
+          <select v-model="rpc" class="select select-bordered w-full flex-1 text-base-content">
             <option v-for="(item, index) in rpcList" :key="index">{{ item?.address }}/consensus_state</option>
           </select>
-          <button class="btn btn-primary" @click="onChange">
+          <button class="btn btn-primary text-primary-content" @click="onChange">
             {{ $t('consensus.monitor') }}
           </button>
         </label>
       </div>
-      <div v-if="httpstatus !== 200" class="text-error mt-1">{{ httpstatus }}: {{ httpStatusText }}</div>
+      <div v-if="httpstatus !== 200" class="text-error text-base-content mt-1">{{ httpstatus }}: {{ httpStatusText }}</div>
     </div>
     <!-- cards -->
     <div class="mt-4" v-if="roundState['height/round/step']">
       <div class="grid grid-cols-1 md:!grid-cols-4 auto-cols-auto gap-4 pb-4">
-        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
+        <div class="bg-base-100 px-4 py-3 rounded-box shadow-md flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ rate }}</h4>
-            <span class="text-md">{{ $t('consensus.onboard_rate') }}</span>
+            <h4 class="text-lg font-bold text-base-content">{{ rate }}</h4>
+            <span class="text-sm text-neutral-content">{{ $t('consensus.onboard_rate') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div class="bg-rose-100 text-neutral-content rounded-full w-12 h-12">
-              <span class="text-2xl text-error font-semibold">{{ $t('consensus.o') }}</span>
+            <div class="bg-error-content text-error rounded-full w-12 h-12">
+              <span class="text-2xl font-semibold">{{ $t('consensus.o') }}</span>
             </div>
           </div>
         </div>
         <!-- Height -->
-        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
+        <div class="bg-base-100 px-4 py-3 rounded-box shadow-md flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ height }}</h4>
-            <span class="text-md">{{ $t('account.height') }}</span>
+            <h4 class="text-lg font-bold text-base-content">{{ height }}</h4>
+            <span class="text-sm text-neutral-content">{{ $t('account.height') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div class="bg-green-100 text-neutral-content rounded-full w-12 h-12">
-              <span class="text-2xl text-success font-semibold">{{ $t('consensus.h') }}</span>
+            <div class="bg-success-content text-success rounded-full w-12 h-12">
+              <span class="text-2xl font-semibold">{{ $t('consensus.h') }}</span>
             </div>
           </div>
         </div>
         <!-- Round -->
-        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
+        <div class="bg-base-100 px-4 py-3 rounded-box shadow-md flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ round }}</h4>
-            <span class="text-md">{{ $t('consensus.round') }}</span>
+            <h4 class="text-lg font-bold text-base-content">{{ round }}</h4>
+            <span class="text-sm text-neutral-content">{{ $t('consensus.round') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div class="bg-violet-100 text-neutral-content rounded-full w-12 h-12">
-              <span class="text-2xl text-primary font-semibold">{{ $t('consensus.r') }}</span>
+            <div class="bg-primary-content text-primary rounded-full w-12 h-12">
+              <span class="text-2xl font-semibold">{{ $t('consensus.r') }}</span>
             </div>
           </div>
         </div>
         <!-- Step -->
-        <div class="bg-base-100 px-4 py-3 rounded shadow flex justify-between items-center">
+        <div class="bg-base-100 px-4 py-3 rounded-box shadow-md flex justify-between items-center">
           <div class="text-sm mb-1 flex flex-col truncate">
-            <h4 class="text-lg font-semibold text-main">{{ step }}</h4>
-            <span class="text-md">{{ $t('consensus.step') }}</span>
+            <h4 class="text-lg font-bold text-base-content">{{ step }}</h4>
+            <span class="text-sm text-neutral-content">{{ $t('consensus.step') }}</span>
           </div>
           <div class="avatar placeholder">
-            <div class="bg-blue-100 text-neutral-content rounded-full w-12 h-12">
-              <span class="text-2xl text-info font-semibold">{{ $t('consensus.s') }}</span>
+            <div class="bg-info-content text-info rounded-full w-12 h-12">
+              <span class="text-2xl font-semibold">{{ $t('consensus.s') }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- update -->
-    <div class="bg-base-100 p-4 rounded shadow" v-if="roundState['height/round/step']">
+    <div class="bg-base-100 p-4 rounded-box shadow-md" v-if="roundState['height/round/step']">
       <div class="flex flex-1 flex-col truncate">
-        <h2 class="text-sm card-title text-error mb-6">{{ $t('consensus.updated_at') }} {{ newTime || '' }}</h2>
+        <h2 class="text-xl font-semibold text-base-content mb-6">{{ $t('consensus.updated_at') }} {{ newTime || '' }}</h2>
         <div v-for="item in roundState.height_vote_set" :key="item.round">
-          <div class="text-xs mb-1">
+          <div class="text-sm mb-1 text-neutral-content">
             {{ $t('consensus.round') }}: {{ item.round }}
           </div>
-          <div class="text-xs break-words">{{ item.prevotes_bit_array }}</div>
+          <div class="text-sm break-words text-base-content">{{ item.prevotes_bit_array }}</div>
 
           <div class="flex flex-rows flex-wrap py-6">
             <div
-              class="w-48 rounded-3xl h-5 text-sm px-2 leading-5"
+              class="w-48 rounded-full h-6 text-sm px-2 leading-6 bg-base-200 text-base-content"
               v-for="(pre, i) in item.prevotes"
               :key="i"
               size="sm"
@@ -244,20 +238,20 @@ async function update() {
                 <span class="truncate">{{ showName(i, 'nil-Vote') }} </span>
                 <span>
                   <span
-                    class="tooltip"
+                    class="tooltip w-2 h-2 rounded-full inline-block"
                     :data-tip="pre"
                     :class="{
-                      'bg-green-400': String(pre).toLowerCase() !== 'nil-vote',
-                      'bg-red-400': String(pre).toLowerCase() === 'nil-vote',
+                      'bg-success': String(pre).toLowerCase() !== 'nil-vote',
+                      'bg-error': String(pre).toLowerCase() === 'nil-vote',
                     }"
                     >&nbsp;</span
                   >
                   <span
-                    class="tooltip ml-1"
+                    class="tooltip ml-1 w-2 h-2 rounded-full inline-block"
                     :data-tip="item.precommits[i]"
                     :class="{
-                      'bg-green-400': String(item.precommits[i]).toLowerCase() !== 'nil-vote',
-                      'bg-red-400': String(item.precommits[i]).toLowerCase() === 'nil-vote',
+                      'bg-success': String(item.precommits[i]).toLowerCase() !== 'nil-vote',
+                      'bg-error': String(item.precommits[i]).toLowerCase() === 'nil-vote',
                     }"
                     >&nbsp;</span
                   >
@@ -271,12 +265,12 @@ async function update() {
     </div>
 
     <!-- alert-info -->
-    <div class="text-[#00cfe8] bg-[rgba(0,207,232,0.12)] rounded shadow mt-4 alert-info">
-      <div class="drop-shadow-md px-4 pt-2 pb-2" style="box-shadow: rgba(0, 207, 232, 0.4) 0px 6px 15px -7px">
-        <h2 class="text-base font-semibold">{{ $t('consensus.tips') }}</h2>
+    <div class="alert alert-info shadow-md rounded-box mt-4">
+      <div class="px-4 pt-2 pb-2">
+        <h2 class="text-base font-semibold text-info-content">{{ $t('consensus.tips') }}</h2>
       </div>
       <div class="px-4 py-4">
-        <ul style="list-style-type: disc" class="pl-8">
+        <ul class="list-disc pl-8 text-info-content">
           <li>
             {{ $t('consensus.tips_description_1') }}
           </li>

@@ -122,148 +122,117 @@ function color(v: string) {
 
 <template>
   <div>
-    <div class="overflow-x-auto w-full">
-      <div
-        class="lg:!flex lg:!items-center lg:!justify-between bg-base-100 p-5"
-      >
+    <div class="bg-base-100 shadow-md rounded-box p-4 mb-6">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
         <div class="min-w-0 flex-1">
-          <h2 class="text-2xl font-bold leading-7 sm:!truncate sm:!text-3xl sm:!tracking-tight">
+          <h2 class="text-2xl font-bold leading-7 text-base-content sm:truncate sm:text-3xl sm:tracking-tight">
             {{ $t('uptime.my_validators') }}
           </h2>
-          <div class="mt-1 flex flex-col sm:!mt-0 sm:!flex-row sm:!flex-wrap sm:!space-x-6">
-            <div class="mt-2 flex items-center text-sm text-gray-500">
-              <svg
-                class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M6 3.75A2.75 2.75 0 018.75 1h2.5A2.75 2.75 0 0114 3.75v.443c.572.055 1.14.122 1.706.2C17.053 4.582 18 5.75 18 7.07v3.469c0 1.126-.694 2.191-1.83 2.54-1.952.599-4.024.921-6.17.921s-4.219-.322-6.17-.921C2.694 12.73 2 11.665 2 10.539V7.07c0-1.321.947-2.489 2.294-2.676A41.047 41.047 0 016 4.193V3.75zm6.5 0v.325a41.622 41.622 0 00-5 0V3.75c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25zM10 10a1 1 0 00-1 1v.01a1 1 0 001 1h.01a1 1 0 001-1V11a1 1 0 00-1-1H10z"
-                  clip-rule="evenodd"
-                />
-                <path
-                  d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 01-9.274 0C3.985 17.585 3 16.402 3 15.055z"
-                />
-              </svg>
+          <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+            <div class="mt-2 flex items-center text-sm text-neutral-content">
+              <Icon icon="mdi:monitor-dashboard" class="mr-1.5 h-5 w-5 flex-shrink-0 text-primary" />
               {{ $t('uptime.add_validators_monitor') }}
             </div>
           </div>
         </div>
-        <div class="mt-5 flex lg:!ml-4 lg:!mt-0"></div>
       </div>
-      <table class="table table-compact w-full">
-        <thead>
-          <tr>
-            <th>{{ $t('uptime.no') }}</th>
-            <th>Blockchain</th>
-            <th>{{ $t('account.validator') }}</th>
-            <th>{{ $t('uptime.signed_blocks') }}</th>
-            <th>{{ $t('uptime.last_jailed_time') }}</th>
-            <th>{{ $t('uptime.tombstoned') }}</th>
-            <th>{{ $t('uptime.missing_blocks') }}</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(v, i) in list" class="hover">
-            <td>{{ i + 1 }}</td>
-            <td class="capitalize">{{ v.chainName }}</td>
-            <td>{{ v.v.name }}</td>
-            <td>
-              <span v-if="v.sigingInfo">{{
-                Number(v.sigingInfo.index_offset) - Number(v.sigingInfo.start_height)
-              }}</span>
-            </td>
-            <td>
-              <span v-if="v.sigingInfo">{{
-                Number(v.sigingInfo.index_offset) -
-                Number(v.sigingInfo.start_height)
-              }}</span>
-            </td>
-            <td>
-              <div
-                v-if="
-                  v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')
-                "
-                class="text-xs flex flex-wrap"
-              >
-                <div class="mt-1">
-                  {{ format.toLocaleDate(v.sigingInfo?.jailed_until) }}
+
+      <div class="overflow-x-auto mt-6">
+        <table class="table w-full table-zebra">
+          <thead class="bg-base-200">
+            <tr>
+              <th class="text-left uppercase text-base-content font-semibold">{{ $t('uptime.no') }}</th>
+              <th class="text-left uppercase text-base-content font-semibold">Blockchain</th>
+              <th class="text-left uppercase text-base-content font-semibold">{{ $t('account.validator') }}</th>
+              <th class="text-right uppercase text-base-content font-semibold">{{ $t('uptime.signed_blocks') }}</th>
+              <th class="text-left uppercase text-base-content font-semibold">{{ $t('uptime.last_jailed_time') }}</th>
+              <th class="text-left uppercase text-base-content font-semibold">{{ $t('uptime.tombstoned') }}</th>
+              <th class="text-right uppercase text-base-content font-semibold">{{ $t('uptime.missing_blocks') }}</th>
+              <th class="text-center uppercase text-base-content font-semibold"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(v, i) in list" :key="v.v.address" class="hover:bg-base-200 transition-colors duration-200">
+              <td class="text-neutral-content">{{ i + 1 }}</td>
+              <td class="capitalize text-base-content font-medium">{{ v.chainName }}</td>
+              <td class="text-primary link link-hover">
+                <RouterLink :to="`/${v.chainName}/staking/${v.v.address}`">{{ v.v.name }}</RouterLink>
+              </td>
+              <td class="text-right text-neutral-content">
+                <span v-if="v.sigingInfo">{{
+                  Number(v.sigingInfo.index_offset) - Number(v.sigingInfo.start_height)
+                }}</span>
+                <span v-else>-</span>
+              </td>
+              <td>
+                <div
+                  v-if="v.sigingInfo && !v.sigingInfo?.jailed_until.startsWith('1970')"
+                  class="flex flex-col"
+                >
+                  <span class="text-neutral-content">{{ format.toLocaleDate(v.sigingInfo?.jailed_until) }}</span>
+                  <span class="badge badge-ghost text-xs mt-1">{{ format.toDay(v.sigingInfo.jailed_until, 'from') }}</span>
                 </div>
-                <div class="badge">
-                  {{ format.toDay(v.sigingInfo.jailed_until, 'from') }}
-                </div>
-              </div>
-            </td>
-            <td class="capitalize">{{ v.sigingInfo?.tombstoned }}</td>
-            <td>
-              <span v-if="v.sigingInfo" class="badge" :class="color(v.sigingInfo?.missed_blocks_counter)">{{
-                v.sigingInfo?.missed_blocks_counter
-              }}</span>
-            </td>
-            <td class="">
-              <RouterLink :to="`/${v.chainName}/uptime/#blocks`" class="btn btn-xs btn-primary">{{
-                $t('module.blocks')
-              }}</RouterLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <span v-else class="text-neutral-content">-</span>
+              </td>
+              <td class="capitalize text-neutral-content">{{ v.sigingInfo?.tombstoned ? 'Yes' : 'No' }}</td>
+              <td class="text-right">
+                <span v-if="v.sigingInfo" class="badge" :class="color(v.sigingInfo?.missed_blocks_counter)">{{
+                  v.sigingInfo?.missed_blocks_counter
+                }}</span>
+                <span v-else class="text-neutral-content">-</span>
+              </td>
+              <td class="text-center">
+                <RouterLink :to="`/${v.chainName}/uptime/#blocks`" class="btn btn-xs btn-primary capitalize text-primary-content">{{
+                  $t('module.blocks')
+                }}</RouterLink>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="text-center">
-      <label for="add-validator" class="btn btn-primary mt-5">{{
+    <div class="text-center mt-6">
+      <label for="add-validator" class="btn btn-primary capitalize text-primary-content">{{
         $t('uptime.add_validators')
       }}</label>
     </div>
 
-    <!-- Put this part before </body> tag -->
-    <input
-      type="checkbox"
-      id="add-validator"
-      class="modal-toggle"
-      @change="initial"
-    />
+    <input type="checkbox" id="add-validator" class="modal-toggle" @change="initial" />
     <div class="modal">
-      <div class="modal-box relative">
-        <label
-          for="add-validator"
-          class="btn btn-sm btn-circle absolute right-2 top-2"
-          >✕</label
-        >
-        <h3 class="text-lg font-bold">{{ $t('uptime.add_validators') }}</h3>
-        <div class="form-control my-5 border-2">
-          <div class="input-group input-group-md">
-            <select v-model="selectChain" class="select select-bordered capitalize" @change="changeChain">
-              <option v-for="v in dashboard.chains" :value="v.chainName">
-                {{ v.chainName }}
+      <div class="modal-box relative w-11/12 max-w-2xl">
+        <label for="add-validator" class="btn btn-sm btn-circle absolute right-4 top-4">✕</label>
+        <h3 class="text-xl font-bold text-base-content mb-4">{{ $t('uptime.add_validators') }}</h3>
+        <div class="form-control my-5">
+          <div class="input-group">
+            <select v-model="selectChain" class="select select-bordered capitalize bg-base-200 text-base-content" @change="changeChain">
+              <option v-for="c in dashboard.chains" :value="c.chainName" :key="c.chainName">
+                {{ c.chainName }}
               </option>
             </select>
-            <input v-model="keyword" type="text" class="input w-full" placeholder="keywords to filter validator" />
+            <input v-model="keyword" type="text" class="input input-bordered w-full bg-base-200 text-base-content" :placeholder="$t('uptime.filter_validator_placeholder')" />
           </div>
         </div>
-        <div class="py-4 max-h-60 overflow-y-auto">
-          <table class="table table-compact w-full hover">
+        <div class="py-4 max-h-80 overflow-y-auto bg-base-200 rounded-box">
+          <table class="table w-full table-zebra">
             <thead>
               <tr>
-                <th>{{ $t('account.validator') }}</th>
-                <th></th>
+                <th class="text-left uppercase text-base-content font-semibold">{{ $t('account.validator') }}</th>
+                <th class="text-center uppercase text-base-content font-semibold"></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(v, i) in filterValidators">
+              <tr v-for="(v, i) in filterValidators" :key="v.operator_address" class="hover:bg-base-300 transition-colors duration-200">
                 <td>
-                  <label :for="v.operator_address"
-                    ><div class="w-full">{{ i + 1 }}. {{ v.description.moniker }}</div></label
-                  >
+                  <label :for="v.operator_address" class="flex items-center cursor-pointer">
+                    <span class="text-base-content font-medium">{{ i + 1 }}. {{ v.description.moniker }}</span>
+                  </label>
                 </td>
-                <td>
+                <td class="text-center">
                   <input
                     :id="v.operator_address"
                     v-model="selected"
-                    class="checkbox"
+                    class="checkbox checkbox-primary"
                     type="checkbox"
                     :value="consensusPubkeyToHexAddress(v.consensus_pubkey)"
                   />
@@ -272,8 +241,8 @@ function color(v: string) {
             </tbody>
           </table>
         </div>
-        <div class="modal-action">
-          <label class="btn btn-primary" @click="add">{{
+        <div class="modal-action mt-6">
+          <label class="btn btn-primary capitalize text-primary-content" @click="add">{{
             $t('uptime.add')
           }}</label>
         </div>

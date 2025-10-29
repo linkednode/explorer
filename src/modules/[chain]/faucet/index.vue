@@ -87,7 +87,7 @@ onMounted(() => {
           viewBox="0 0 150.000000 132.000000"
           preserveAspectRatio="xMidYMid meet"
         >
-          <g transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)" fill="#666CFF" class="" stroke="none">
+          <g transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)" fill="hsl(var(--p))" class="" stroke="none">
             <path
               d="M500 1310 l-125 -5 -182 -315 c-100 -173 -182 -321 -182 -329 -1 -7
             81 -159 181 -337 l183 -324 372 0 371 0 186 325 c102 179 186 330 186 337 0 7
@@ -113,64 +113,63 @@ onMounted(() => {
       </div>
       <h1 class="text-primary text-3xl md:!text-6xl font-bold capitalize">{{ chainStore.chainName }} Faucet</h1>
     </div>
-    <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title">Get Tokens</h2>
+    <div class="bg-base-100 shadow-md rounded-box my-5 px-4 pt-3 pb-4">
+      <h2 class="text-xl font-semibold text-base-content">Get Tokens</h2>
       <input
         type="text"
         v-model="address"
-        class="mt-4 mb-4 w-full border border-gray-300 rounded-md p-2"
+        class="mt-4 mb-4 w-full input input-bordered rounded-box p-2 text-base-content"
         :class="{ 'input-error': !validAddress }"
         :disabled="notReady"
         placeholder="Enter your address"
       />
-      <button class="btn btn-primary w-full bg-primary text-white" :disabled="notReady" @click="claim()">
+      <button class="btn btn-primary w-full text-primary-content" :disabled="notReady" @click="claim()">
         Get Tokens
       </button>
     </div>
 
     <AdBanner id="home-banner-ad" unit="banner" />
 
-    <div class="bg-base-100 my-5 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title">Enable Faucet</h2>
+    <div class="bg-base-100 shadow-md rounded-box my-5 px-4 pt-3 pb-4">
+      <h2 class="text-xl font-semibold text-base-content">Enable Faucet</h2>
       <div class="mt-4">
-        <span class="text-base"> 1. Submit chain configuration</span>
+        <span class="text-base text-base-content"> 1. Submit chain configuration</span>
         <div class="mockup-code bg-base-200 my-2 gap-4">
-          <div v-for="it in checklist">
-            <pre><code class="text-gray-800 dark:invert">{{ it.title }}: </code>{{ it.status ? '✅' : '❌' }} </pre>
+          <div v-for="it in checklist" :key="it.title">
+            <pre><code class="text-base-content">{{ it.title }}: </code>{{ it.status ? '✅' : '❌' }} </pre>
           </div>
 
-          <pre class="text-xs text-red-500">{{ configChecker }}</pre>
-          <pre></pre>
-          <a
-            class="btn-ghost text-white rounded-md p-2 ml-4"
-            href="https://github.com/ping-pub/ping.pub/blob/main/faucet.md"
-            >Update</a
-          >
+          <pre class="text-xs text-error">{{ configChecker }}</pre>
         </div>
+        <a
+          class="btn btn-ghost text-primary rounded-btn p-2 ml-4"
+          href="https://github.com/ping-pub/ping.pub/blob/main/faucet.md"
+          >Update</a
+        >
 
-        <span class="text-base"> 2. Fund the faucet account</span>
+        <span class="text-base text-base-content"> 2. Fund the faucet account</span>
         <div class="mockup-code bg-base-200 my-2">
-          <pre data-prefix=">"><code class=" text-gray-800 dark:invert"> Faucet Address: {{ faucet }} </code></pre>
+          <pre data-prefix=">"><code class="text-base-content"> Faucet Address: {{ faucet }} </code></pre>
           <pre
             data-prefix=">"
-          ><code class="text-gray-800 dark:invert"> Balances: {{ format.formatTokens(balances) }} </code></pre>
+          ><code class="text-base-content"> Balances: {{ format.formatTokens(balances) }} </code></pre>
         </div>
       </div>
     </div>
     <input type="checkbox" v-model="faucetModal" id="my_modal_6" class="modal-toggle" />
     <div class="modal" role="dialog">
-      <div class="modal-box">
+      <div class="modal-box bg-base-100 shadow-lg rounded-box">
         <div v-if="ret.status === 'error'">
-          <h3 class="font-bold text-red-500">Error</h3>
-          <div>{{ ret.message }}</div>
+          <h3 class="font-bold text-error">Error</h3>
+          <div class="text-base-content">{{ ret.message }}</div>
         </div>
         <div v-else-if="ret.status === 'ok'">
-          <h3 class="font-bold text-green-500">Token Sent!</h3>
-          <div class="text-center mt-4">
-            <RouterLink :to="`/${chainStore.chainName}/tx/${ret.result.txhash}`">View Transaction</RouterLink>
+          <h3 class="font-bold text-success">Token Sent!</h3>
+          <div class="text-center mt-4 text-base-content">
+            <RouterLink :to="`/${chainStore.chainName}/tx/${ret.result.txhash}`" class="link link-hover text-primary">View Transaction</RouterLink>
           </div>
         </div>
-        <h3 v-else class="font-bold text-lg">Processing <span class="loading loading-bars loading-sm"></span></h3>
+        <h3 v-else class="font-bold text-xl text-base-content">Processing <span class="loading loading-bars loading-sm"></span></h3>
 
         <div class="modal-action">
           <label for="my_modal_6" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
