@@ -92,7 +92,7 @@ const show_ad = computed(() => {
   <div class="bg-base-200 text-base-content">
     <!-- sidebar -->
     <div
-      class="fixed z-50 top-0 bottom-0 overflow-auto bg-base-100 shadow-xl transition-all duration-300 ease-in-out transform"
+      class="fixed z-[999] top-0 bottom-0 overflow-auto bg-base-100 shadow-xl transition-all duration-300 ease-in-out transform"
       :class="{
         'w-64': sidebarExpanded && !sidebarCollapsed,
         'w-16': sidebarCollapsed,
@@ -100,13 +100,9 @@ const show_ad = computed(() => {
         '-translate-x-full': !sidebarShow,
         'xl:translate-x-0 xl:!block': !sidebarShow || sidebarCollapsed,
       }"
+      style="pointer-events: auto;"
     >
       <!-- Overlay for mobile sidebar -->
-      <div
-        v-if="sidebarShow && !sidebarCollapsed"
-        class="fixed inset-0 bg-black opacity-50 z-40 xl:hidden"
-        @click="sidebarShow = false"
-      ></div>
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
         <RouterLink to="/" class="flex items-center" :class="{ 'hidden': sidebarCollapsed }">
           <img class="w-10 h-10" src="../../assets/home.svg" />
@@ -324,11 +320,19 @@ const show_ad = computed(() => {
         </a>
       </div>
     </div>
+    <!-- Overlay for mobile sidebar -->
+      <div
+        v-if="sidebarShow && !sidebarCollapsed"
+        class="fixed inset-0 bg-black opacity-50 z-[998] xl:hidden"
+        @click="sidebarShow = false"
+      ></div>
+
     <div
-      class="px-3 pt-4 transition-all duration-300 ease-in-out"
+      class="px-3 pt-4 transition-all duration-300 ease-in-out relative z-20"
       :class="{
         'xl:!ml-64': sidebarExpanded && !sidebarCollapsed,
         'xl:!ml-16': sidebarCollapsed,
+        'pointer-events-none': sidebarShow,
       }"
     >
       <!-- header -->
@@ -341,7 +345,6 @@ const show_ad = computed(() => {
         >
           <Icon icon="mdi-menu" />
         </div>
-
         <ChainProfile />
 
         <div class="flex-1 w-0"></div>
