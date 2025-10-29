@@ -309,7 +309,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               <td class="py-3 text-base-content">
                 {{
                   format.formatTokens(
-                    rewards?.rewards?.find((x: { validator_address: string; reward: any[] }) => x.validator_address === v.delegation.validator_address)?.reward
+                    rewards?.rewards?.find((x) => x.validator_address === v.delegation.validator_address)?.reward
                   )
                 }}
               </td>

@@ -387,7 +387,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
               <td v-if="item.options" class="py-2 text-sm text-base-content">
                 {{
                   item.options
-                    .map((x: { option: string; weight: string }) => `${x.option.replace('VOTE_OPTION_', '')}:${format.percent(x.weight)}`)
+                    .map((x) => `${x.option.replace('VOTE_OPTION_', '')}:${format.percent(x.weight)}`)
                     .join(', ')
                 }}
               </td>

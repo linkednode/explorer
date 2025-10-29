@@ -410,7 +410,7 @@ const amount = computed({
                 {{
                   format.formatTokens(
                     walletStore?.rewards?.rewards?.find(
-                      (el: { validator_address: string; reward: any[] }) => el?.validator_address === item?.delegation?.validator_address
+                      (el) => el?.validator_address === item?.delegation?.validator_address
                     )?.reward
                   )
                 }}
