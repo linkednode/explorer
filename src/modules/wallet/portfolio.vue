@@ -341,7 +341,7 @@ const currencySign = computed(() => {
 <route>
     {
       meta: {
-        i18n: 'portfolio',
+        i18n: false,
         order: 101
       }
     }

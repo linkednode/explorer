@@ -118,7 +118,7 @@ function suggest() {
 <route>
     {
       meta: {
-        i18n: 'keplr',
+        i18n: false,
         order: 100
       }
     }

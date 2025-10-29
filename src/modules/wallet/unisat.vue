@@ -118,7 +118,7 @@ function suggest() {
 <route>
     {
       meta: {
-        i18n: 'unisat',
+        i18n: false,
         order: 102
       }
     }
