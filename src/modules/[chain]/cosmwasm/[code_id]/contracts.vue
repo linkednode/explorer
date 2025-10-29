@@ -44,26 +44,26 @@ function showInfo(address: string) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate w-full">{{ $t('cosmwasm.contract_list_code') }}: {{ props.code_id }}</h2>
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
+      <h2 class="text-xl font-semibold truncate w-full text-base-content">{{ $t('cosmwasm.contract_list_code') }}: {{ props.code_id }}</h2>
       <div class="overflow-x-auto">
-        <table class="table table-compact w-full mt-4">
-          <thead class="bg-base-200">
+        <table class="table table-compact w-full mt-4 text-sm table-zebra">
+          <thead>
             <tr>
-              <th style="position: relative; z-index: 2">
+              <th style="position: relative; z-index: 2" class="bg-base-200 text-base-content font-semibold">
                 {{ $t('cosmwasm.contract_list') }}
               </th>
-              <th>{{ $t('account.action') }}</th>
+              <th class="bg-base-200 text-base-content font-semibold">{{ $t('account.action') }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(v, index) in response.contracts" :key="index" class="hover">
-              <td>{{ v }}</td>
+            <tr v-for="(v, index) in response.contracts" :key="index">
+              <td class="text-base-content">{{ v }}</td>
               <td>
-                <label @click="showInfo(v)" for="modal-contract-detail" class="btn btn-primary btn-xs text-xs mr-2">{{
+                <label @click="showInfo(v)" for="modal-contract-detail" class="btn btn-primary btn-xs rounded-btn text-primary-content mr-2">{{
                   $t('cosmwasm.btn_contract')
                 }}</label>
-                <RouterLink :to="`transactions?contract=${v}`" class="btn btn-primary btn-xs text-xs">
+                <RouterLink :to="`transactions?contract=${v}`" class="btn btn-primary btn-xs rounded-btn text-primary-content">
                   {{ $t('cosmwasm.btn_details') }}
                 </RouterLink>
               </td>
@@ -71,10 +71,10 @@ function showInfo(address: string) {
           </tbody>
         </table>
         <div class="flex justify-between">
-          <PaginationBar :limit="pageRequest.limit" :total="response.pagination?.total" :callback="loadContract" />
+          <PaginationBar :limit="pageRequest.limit" :total="response.pagination?.total" :callback="loadContract" class="mt-4" />
           <label
             for="wasm_instantiate_contract"
-            class="btn btn-primary my-5"
+            class="btn btn-primary my-5 text-primary-content"
             @click="
               dialog.open('wasm_instantiate_contract', {
                 codeId: props.code_id,
@@ -88,10 +88,10 @@ function showInfo(address: string) {
 
     <input type="checkbox" id="modal-contract-detail" class="modal-toggle" />
     <label for="modal-contract-detail" class="modal cursor-pointer">
-      <label class="modal-box !w-11/12 !max-w-5xl relative p-2" for="">
+      <label class="modal-box !w-11/12 !max-w-5xl relative p-2 bg-base-100 shadow-lg rounded-box" for="">
         <div>
           <div class="flex items-center justify-between px-3 pt-2">
-            <div class="text-lg">{{ $t('cosmwasm.contract_detail') }}</div>
+            <div class="text-xl font-semibold text-base-content">{{ $t('cosmwasm.contract_detail') }}</div>
             <label @click="infoDialog = false" for="modal-contract-detail" class="btn btn-sm btn-circle">✕</label>
           </div>
           <div>

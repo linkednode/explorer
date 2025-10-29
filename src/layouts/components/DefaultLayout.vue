@@ -44,12 +44,17 @@ blockchain.$subscribe((m, s) => {
 });
 
 const sidebarShow = ref(false);
-const sidebarOpen = ref(true);
+const sidebarExpanded = ref(true); // Renamed from sidebarOpen
+const sidebarCollapsed = ref(false); // New ref for collapsed state
 
-const changeOpen = (index: Number) => {
+const toggleSidebarExpanded = (index: Number) => {
   if (index === 0) {
-    sidebarOpen.value = !sidebarOpen.value;
+    sidebarExpanded.value = !sidebarExpanded.value;
   }
+};
+
+const toggleSidebarCollapsed = () => {
+  sidebarCollapsed.value = !sidebarCollapsed.value;
 };
 const showDiscord = window.location.host.search('ping.pub') > -1;
 
@@ -84,24 +89,44 @@ const show_ad = computed(() => {
 </script>
 
 <template>
-  <div class="bg-gray-100 dark:bg-[#171d30]">
+  <div class="bg-base-200 text-base-content">
     <!-- sidebar -->
     <div
-      class="w-64 fixed z-50 left-0 top-0 bottom-0 overflow-auto bg-base-100 border-r border-gray-100 dark:border-gray-700"
-      :class="{ block: sidebarShow, 'hidden xl:!block': !sidebarShow }"
+      class="fixed z-[999] top-0 bottom-0 overflow-auto bg-base-100 shadow-xl transition-all duration-300 ease-in-out transform"
+      :class="{
+        'w-64': sidebarExpanded && !sidebarCollapsed,
+        'w-16': sidebarCollapsed,
+        'translate-x-0': sidebarShow,
+        '-translate-x-full': !sidebarShow,
+        'xl:translate-x-0 xl:!block': !sidebarShow || sidebarCollapsed,
+      }"
+      style="pointer-events: auto;"
     >
+      <!-- Overlay for mobile sidebar -->
       <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
-        <RouterLink to="/" class="flex items-center">
+        <RouterLink to="/" class="flex items-center" :class="{ 'hidden': sidebarCollapsed }">
           <img class="w-10 h-10" src="../../assets/home.svg" />
-          <h1 class="flex-1 ml-3 text-2xl font-semibold dark:text-white">
+          <h1 class="flex-1 ml-3 text-2xl font-semibold text-primary">
             linkednode
           </h1>
         </RouterLink>
-        <div
-          class="pr-4 cursor-pointer xl:!hidden"
-          @click="sidebarShow = false"
-        >
-          <Icon icon="mdi-close" class="text-2xl" />
+        <div class="flex items-center" :class="{ 'w-full justify-center': sidebarCollapsed }">
+          <RouterLink to="/" class="flex items-center" v-if="sidebarCollapsed">
+            <img class="w-10 h-10" src="../../assets/home.svg" />
+          </RouterLink>
+          <div
+            class="pr-4 cursor-pointer xl:!hidden"
+            @click="sidebarShow = false"
+          >
+            <Icon icon="mdi-close" class="text-2xl" />
+          </div>
+          <div
+            class="pl-4 cursor-pointer hidden xl:!block"
+            @click="toggleSidebarCollapsed"
+            :class="{ 'w-full text-center': sidebarCollapsed }"
+          >
+            <Icon :icon="sidebarCollapsed ? 'mdi-arrow-right-circle' : 'mdi-arrow-left-circle'" class="text-2xl" />
+          </div>
         </div>
       </div>
       <div v-for="(item, index) of blockchain.computedChainMenu" :key="index" class="px-2">
@@ -110,44 +135,51 @@ const show_ad = computed(() => {
           :tabindex="index"
           class="collapse"
           :class="{
-            'collapse-arrow': index > 0 && item?.children?.length > 0,
-            'collapse-open': index === 0 && sidebarOpen,
-            'collapse-close': index === 0 && !sidebarOpen,
+            'collapse-arrow': index > 0 && item?.children?.length > 0 && !sidebarCollapsed,
+            'collapse-open': index === 0 && sidebarExpanded,
+            'collapse-close': index === 0 && !sidebarExpanded,
+            'collapse-open-collapsed': sidebarCollapsed,
           }"
         >
-          <input v-if="index > 0" type="checkbox" class="cursor-pointer !h-10 block" @click="changeOpen(index)" />
+          <input v-if="index > 0 && !sidebarCollapsed" type="checkbox" class="cursor-pointer !h-10 block" @click="toggleSidebarExpanded(index)" />
           <div
-            class="collapse-title !py-0 px-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+            class="collapse-title !py-2 px-4 flex items-center cursor-pointer hover:bg-base-200 transition-colors duration-200 ease-in-out"
+            :class="{ 'justify-center': sidebarCollapsed, '!px-0': sidebarCollapsed }"
           >
             <Icon
               v-if="item?.icon?.icon"
               :icon="item?.icon?.icon"
-              class="text-xl mr-2"
+              class="text-xl"
               :class="{
-                'text-yellow-500': item?.title === 'Favorite',
-                'text-blue-500': item?.title !== 'Favorite',
+                'text-warning': item?.title === 'Favorite',
+                'text-info': item?.title !== 'Favorite',
+                'mr-3': !sidebarCollapsed,
               }"
             />
-            <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full mr-3" />
-            <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
+            <img v-if="item?.icon?.image" :src="item?.icon?.image" class="w-6 h-6 rounded-full" :class="{ 'mr-3': !sidebarCollapsed }" />
+            <div
+              class="text-base capitalize flex-1 text-base-content whitespace-nowrap"
+              :class="{ 'hidden': sidebarCollapsed, 'ml-3': item?.icon?.image }"
+            >
               {{ item?.title }}
             </div>
             <div
-              v-if="item?.badgeContent"
+              v-if="item?.badgeContent && !sidebarCollapsed"
               class="mr-6 badge badge-sm text-white border-none"
               :class="item?.badgeClass"
             >
               {{ item?.badgeContent }}
             </div>
           </div>
-          <div class="collapse-content">
+          <div class="collapse-content" :class="{ 'hidden': sidebarCollapsed }">
             <div v-for="(el, key) of item?.children" class="menu bg-base-100 w-full !p-0">
               <RouterLink
                 v-if="isNavLink(el)"
                 @click="sidebarShow = false"
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-base-200 rounded cursor-pointer px-4 py-2 flex items-center transition-colors duration-200 ease-in-out"
                 :class="{
-                  '!bg-primary': selected($route, el),
+                  '!bg-primary !text-white border-l-4 border-primary-focus': selected($route, el),
+                  'ml-4': !sidebarCollapsed,
                 }"
                 :to="el.to"
               >
@@ -156,7 +188,7 @@ const show_ad = computed(() => {
                   icon="mdi:chevron-right"
                   class="mr-2 ml-3"
                   :class="{
-                    'text-white': $route.path === el?.to?.path && item?.title !== 'Favorite',
+                    'text-white': selected($route, el),
                   }"
                 />
                 <img
@@ -164,11 +196,11 @@ const show_ad = computed(() => {
                   :src="el?.icon?.image"
                   class="w-6 h-6 rounded-full mr-3 ml-4"
                   :class="{
-                    'border border-gray-300 bg-white': selected($route, el),
+                    'border border-base-300 bg-base-100': selected($route, el),
                   }"
                 />
                 <div
-                  class="text-base capitalize text-gray-500 dark:text-gray-300"
+                  class="text-base capitalize text-base-content"
                   :class="{
                     '!text-white': selected($route, el),
                   }"
@@ -182,11 +214,12 @@ const show_ad = computed(() => {
               class="menu bg-base-100 w-full !p-0"
             >
               <RouterLink
-                class="hover:bg-gray-100 dark:hover:bg-[#373f59] rounded cursor-pointer px-3 py-2 flex items-center"
+                class="hover:bg-base-200 rounded cursor-pointer px-4 py-2 flex items-center transition-colors duration-200 ease-in-out"
+                :class="{ 'ml-4': !sidebarCollapsed }"
                 :to="`/${blockchain.chainName}/faucet`"
               >
                 <Icon icon="mdi:chevron-right" class="mr-2 ml-3"></Icon>
-                <div class="text-base capitalize text-gray-500 dark:text-gray-300">Faucet</div>
+                <div class="text-base capitalize flex-1 text-base-content">Faucet</div>
                 <div class="badge badge-sm text-white border-none badge-error ml-auto">New</div>
               </RouterLink>
             </div>
@@ -197,27 +230,37 @@ const show_ad = computed(() => {
           v-if="isNavLink(item)"
           :to="item?.to"
           @click="sidebarShow = false"
-          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="cursor-pointer rounded-lg px-4 flex items-center py-2 hover:bg-base-200 transition-colors duration-200 ease-in-out"
+          :class="{
+            'justify-center !px-0': sidebarCollapsed,
+            '!bg-primary !text-white border-l-4 border-primary-focus': selected($route, item),
+          }"
         >
           <Icon
             v-if="item?.icon?.icon"
             :icon="item?.icon?.icon"
-            class="text-xl mr-2"
+            class="text-xl"
             :class="{
-              'text-yellow-500': item?.title === 'Favorite',
-              'text-blue-500': item?.title !== 'Favorite',
+              'text-warning': item?.title === 'Favorite',
+              'text-info': item?.title !== 'Favorite',
+              'mr-3': !sidebarCollapsed,
+              '!text-white': selected($route, item),
             }"
           />
           <img
             v-if="item?.icon?.image"
             :src="item?.icon?.image"
-            class="w-6 h-6 rounded-full mr-3 border border-blue-100"
+            class="w-6 h-6 rounded-full border border-base-300"
+            :class="{ 'mr-3': !sidebarCollapsed }"
           />
-          <div class="text-base capitalize flex-1 text-gray-700 dark:text-gray-200 whitespace-nowrap">
+          <div
+            class="text-base capitalize flex-1 text-base-content whitespace-nowrap"
+            :class="{ 'hidden': sidebarCollapsed, 'ml-3': item?.icon?.image, '!text-white': selected($route, item) }"
+          >
             {{ item?.title }}
           </div>
           <div
-            v-if="item?.badgeContent"
+            v-if="item?.badgeContent && !sidebarCollapsed"
             class="badge badge-sm text-white border-none"
             :class="item?.badgeClass"
           >
@@ -226,59 +269,75 @@ const show_ad = computed(() => {
         </RouterLink>
         <div
           v-if="isNavTitle(item)"
-          class="px-4 text-sm text-gray-400 pb-2 uppercase"
+          class="px-4 text-sm text-neutral-content pb-2 uppercase"
+          :class="{ 'hidden': sidebarCollapsed }"
         >
           {{ item?.heading }}
         </div>
       </div>
-      <div class="px-2">
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">Tools</div>
+      <div class="px-2" :class="{ 'hidden': sidebarCollapsed }">
+        <div class="px-4 text-sm pt-2 text-neutral-content pb-2 uppercase">Tools</div>
         <RouterLink
           to="/wallet/suggest"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200 transition-colors duration-200 ease-in-out"
+          :class="{ '!bg-primary !text-white border-l-4 border-primary-focus': selected($route, { to: '/wallet/suggest', title: 'Wallet Helper' }), }"
         >
-          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Wallet Helper</div>
+          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-3" :class="{ '!text-white': selected($route, { to: '/wallet/suggest', title: 'Wallet Helper' }) }" />
+          <div class="text-base capitalize flex-1 text-base-content" :class="{ '!text-white': selected($route, { to: '/wallet/suggest', title: 'Wallet Helper' }) }">Wallet Helper</div>
         </RouterLink>
         <div
           v-if="showDiscord"
-          class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase"
+          class="px-4 text-sm pt-2 text-neutral-content pb-2 uppercase"
         >
           {{ $t('module.sponsors') }}
         </div>
         <Sponsors v-if="showDiscord" />
-        <div class="px-4 text-sm pt-2 text-gray-400 pb-2 uppercase">{{ $t('module.links') }}</div>
+        <div class="px-4 text-sm pt-2 text-neutral-content pb-2 uppercase">{{ $t('module.links') }}</div>
         <a
           href="https://twitter.com/ping_pub"
           target="_blank"
-          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center cursor-pointer rounded-lg hover:bg-base-200 transition-colors duration-200 ease-in-out"
         >
-          <Icon icon="mdi:twitter" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Twitter</div>
+          <Icon icon="mdi:twitter" class="text-xl mr-3" />
+          <div class="text-base capitalize flex-1 text-base-content">Twitter</div>
         </a>
         <a
           v-if="showDiscord"
           href="https://discord.com/invite/CmjYVSr6GW"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-base-200 transition-colors duration-200 ease-in-out"
         >
-          <Icon icon="mdi:discord" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">Discord</div>
+          <Icon icon="mdi:discord" class="text-xl mr-3" />
+          <div class="text-base capitalize flex-1 text-base-content">Discord</div>
         </a>
         <a
           href="https://github.com/ping-pub/explorer/discussions"
           target="_blank"
-          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#373f59]"
+          class="py-2 px-4 flex items-center rounded-lg cursor-pointer hover:bg-base-200 transition-colors duration-200 ease-in-out"
         >
-          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-2" />
-          <div class="text-base capitalize flex-1 text-gray-600 dark:text-gray-200">FAQ</div>
+          <Icon icon="mdi:frequently-asked-questions" class="text-xl mr-3" />
+          <div class="text-base capitalize flex-1 text-base-content">FAQ</div>
         </a>
       </div>
     </div>
-    <div class="xl:!ml-64 px-3 pt-4">
+    <!-- Overlay for mobile sidebar -->
+      <div
+        v-if="sidebarShow && !sidebarCollapsed"
+        class="fixed inset-0 bg-black opacity-50 z-[998] xl:hidden"
+        @click="sidebarShow = false"
+      ></div>
+
+    <div
+      class="px-3 pt-4 transition-all duration-300 ease-in-out relative z-20"
+      :class="{
+        'xl:!ml-64': sidebarExpanded && !sidebarCollapsed,
+        'xl:!ml-16': sidebarCollapsed,
+        'pointer-events-none': sidebarShow,
+      }"
+    >
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-base-100 mb-4 rounded px-4 sticky top-0 z-10"
+        class="flex items-center py-3 bg-base-100 shadow-md mb-4 rounded-box px-4 sticky top-0 z-10"
       >
         <div
           class="text-2xl pr-3 cursor-pointer xl:!hidden"
@@ -286,7 +345,6 @@ const show_ad = computed(() => {
         >
           <Icon icon="mdi-menu" />
         </div>
-
         <ChainProfile />
 
         <div class="flex-1 w-0"></div>

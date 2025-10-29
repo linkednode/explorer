@@ -10,35 +10,49 @@ const props = defineProps({
 const s = ref(0);
 </script>
 <template>
-  <Countdown
-    v-if="time"
-    :time="time > 0 ? time : 0"
-    v-slot="{ days, hours, minutes, seconds }"
-    class="countdown-container justify-items-center"
-  >
-    <span class="text-primary font-bold" :class="css">{{ days }}</span> days
-    <span class="text-primary font-bold" :class="css">{{ hours }}</span> hours
-    <span class="text-primary font-bold" :class="css">{{ minutes }}</span> minutes
-    <span class="text-primary font-bold w-40" :class="css">
-      <Transition name="slide-up">
-        <span v-if="seconds % 2 === 0" class="countdown">{{ seconds }}</span>
-        <span v-else="seconds % 2 === 1" class="countdown">{{ seconds }}</span>
-      </Transition>
-    </span>
-    <span class="ml-10">seconds</span>
-  </Countdown>
+  <div v-if="time" class="flex items-center justify-center space-x-2 text-base-content">
+    <Countdown
+      :time="time > 0 ? time : 0"
+      v-slot="{ days, hours, minutes, seconds }"
+    >
+      <span class="flex flex-col items-center">
+        <span class="text-primary font-bold text-2xl" :class="css">{{ days }}</span>
+        <span class="text-xs text-neutral-content">days</span>
+      </span>
+      <span class="text-primary font-bold text-2xl">:</span>
+      <span class="flex flex-col items-center">
+        <span class="text-primary font-bold text-2xl" :class="css">{{ hours }}</span>
+        <span class="text-xs text-neutral-content">hours</span>
+      </span>
+      <span class="text-primary font-bold text-2xl">:</span>
+      <span class="flex flex-col items-center">
+        <span class="text-primary font-bold text-2xl" :class="css">{{ minutes }}</span>
+        <span class="text-xs text-neutral-content">minutes</span>
+      </span>
+      <span class="text-primary font-bold text-2xl">:</span>
+      <span class="flex flex-col items-center">
+        <Transition name="slide-up" mode="out-in">
+          <span :key="seconds" class="text-primary font-bold text-2xl" :class="css">{{ seconds }}</span>
+        </Transition>
+        <span class="text-xs text-neutral-content">seconds</span>
+      </span>
+    </Countdown>
+  </div>
 </template>
 
 <style>
-.countdown-container {
-  display: inline-flexbox;
-  position: relative;
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.25s ease-out;
 }
 
-.countdown {
-  position: absolute;
-  width: 45%;
-  text-align: right;
-  float: right;
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(calc(80%));
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-calc(15%));
 }
 </style>

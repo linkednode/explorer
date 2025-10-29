@@ -17,6 +17,7 @@ import { useWasmStore } from '../WasmStore';
 import DynamicComponent from '@/components/dynamic/DynamicComponent.vue';
 import { useRoute } from 'vue-router';
 import type { ContractInfo, PaginabledContractStates } from '../types';
+import type { TxResponse } from '@/types'; // Added import for TxResponse
 
 import { JsonViewer } from 'vue3-json-viewer';
 // if you used v1.0.5 or latster ,you should add import "vue3-json-viewer/dist/index.css"
@@ -151,46 +152,47 @@ const tab = ref('detail');
 </script>
 <template>
   <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4">
-      <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'detail' }" @click="tab = 'detail'">{{
+    <div class="tabs tabs-boxed bg-base-100 shadow-md rounded-box mb-4">
+      <a role="tab" class="tab text-neutral-content uppercase" :class="{ 'tab-active': tab === 'detail' }" @click="tab = 'detail'">{{
         $t('cosmwasm.contract_detail')
       }}</a>
       <a
-        class="tab text-gray-400 uppercase"
+        role="tab"
+        class="tab text-neutral-content uppercase"
         :class="{ 'tab-active': tab === 'transaction' }"
         @click="tab = 'transaction'"
         >Transactions</a
       >
-      <a class="tab text-gray-400 uppercase" :class="{ 'tab-active': tab === 'query' }" @click="tab = 'query'">Query</a>
+      <a role="tab" class="tab text-neutral-content uppercase" :class="{ 'tab-active': tab === 'query' }" @click="tab = 'query'">Query</a>
     </div>
 
     <div v-show="tab === 'detail'">
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-        <h2 class="card-title truncate w-full">
+      <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
+        <h2 class="text-xl font-semibold truncate w-full text-base-content">
           {{ $t('cosmwasm.contract_detail') }}
         </h2>
         <DynamicComponent :value="info" />
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
         <div class="flex items-center justify-between px-3 pt-2">
-          <div class="text-lg">{{ $t('cosmwasm.contract_balances') }}</div>
+          <div class="text-xl font-semibold text-base-content">{{ $t('cosmwasm.contract_balances') }}</div>
         </div>
-        <ul class="menu mt-5">
-          <li v-for="b in balances.balances">
-            <a class="flex justify-between"
+        <ul class="menu mt-5 text-base-content">
+          <li v-for="b in balances.balances" :key="b.denom">
+            <a class="flex justify-between hover:bg-base-200 rounded-box"
               ><span>{{ format.formatToken(b) }}</span> {{ b.amount }}
             </a>
           </li>
-          <li v-if="balances.pagination?.total === '0'" class="my-10 text-center">
+          <li v-if="balances.pagination?.total === '0'" class="my-10 text-center text-neutral-content">
             {{ $t('cosmwasm.no_escrowed_assets') }}
           </li>
         </ul>
       </div>
 
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
         <div class="flex items-center justify-between px-3 pt-2 mb-4">
-          <div class="text-lg">{{ $t('cosmwasm.contract_states') }}</div>
+          <div class="text-xl font-semibold text-base-content">{{ $t('cosmwasm.contract_states') }}</div>
         </div>
         <div class="overflow-auto">
           <JsonViewer
@@ -207,18 +209,18 @@ const tab = ref('detail');
             sort
             :expand-depth="5"
           />
-          <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total" :callback="pageloadState" />
+          <PaginationBar :limit="pageRequest.limit" :total="state.pagination?.total" :callback="pageloadState" class="mt-4" />
         </div>
       </div>
 
       <div class="text-center mb-4">
         <RouterLink :to="`../${info.code_id}/contracts`"
-          ><span class="btn btn-xs text-xs mr-2"> Back </span>
+          ><span class="btn btn-xs btn-outline btn-primary rounded-btn text-primary-content mr-2"> Back </span>
         </RouterLink>
 
         <label
           for="wasm_migrate_contract"
-          class="btn btn-primary btn-xs text-xs mr-2"
+          class="btn btn-primary btn-xs rounded-btn text-primary-content mr-2"
           @click="dialog.open('wasm_migrate_contract', { contract: contractAddress })"
         >
           {{ $t('cosmwasm.btn_migrate') }}
@@ -226,7 +228,7 @@ const tab = ref('detail');
 
         <label
           for="wasm_update_admin"
-          class="btn btn-primary btn-xs text-xs mr-2"
+          class="btn btn-primary btn-xs rounded-btn text-primary-content mr-2"
           @click="dialog.open('wasm_update_admin', { contract: contractAddress })"
         >
           {{ $t('cosmwasm.btn_update_admin') }}
@@ -234,7 +236,7 @@ const tab = ref('detail');
 
         <label
           for="wasm_clear_admin"
-          class="btn btn-primary btn-xs text-xs mr-2"
+          class="btn btn-primary btn-xs rounded-btn text-primary-content mr-2"
           @click="dialog.open('wasm_clear_admin', { contract: contractAddress })"
         >
           {{ $t('cosmwasm.btn_clear_admin') }}
@@ -242,7 +244,7 @@ const tab = ref('detail');
 
         <label
           for="wasm_execute_contract"
-          class="btn btn-primary btn-xs text-xs mr-2"
+          class="btn btn-primary btn-xs rounded-btn text-primary-content mr-2"
           @click="dialog.open('wasm_execute_contract', { contract: contractAddress })"
         >
           {{ $t('cosmwasm.btn_execute') }}
@@ -250,58 +252,60 @@ const tab = ref('detail');
       </div>
     </div>
 
-    <div v-show="tab === 'transaction'" class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate w-full mt-4 mb-2">Transactions</h2>
-      <table class="table">
-        <thead class="bg-base-200">
-          <tr>
-            <td>{{ $t('ibc.height') }}</td>
-            <td>{{ $t('ibc.txhash') }}</td>
-            <td>{{ $t('ibc.messages') }}</td>
-            <td>{{ $t('ibc.time') }}</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="resp in txs?.tx_responses">
-            <td>{{ resp.height }}</td>
-            <td>
-              <div class="text-xs truncate text-primary dark:invert">
-                <RouterLink :to="`/${chainStore.chainName}/tx/${resp.txhash}`">{{ resp.txhash }} </RouterLink>
-              </div>
-            </td>
-            <td>
-              <div class="flex">
-                {{ format.messages(resp.tx.body.messages) }}
-                <Icon v-if="resp.code === 0" icon="mdi-check" class="text-success text-lg" />
-                <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
-              </div>
-            </td>
-            <td>{{ format.toLocaleDate(resp.timestamp) }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <PaginationBar :limit="page.limit" :total="txs.pagination?.total" :callback="pageload" />
+    <div v-show="tab === 'transaction'" class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
+      <h2 class="text-xl font-semibold truncate w-full mt-4 mb-2 text-base-content">Transactions</h2>
+      <div class="overflow-x-auto">
+        <table class="table w-full table-zebra">
+          <thead class="bg-base-200">
+            <tr>
+              <th class="text-base-content font-semibold">{{ $t('ibc.height') }}</th>
+              <th class="text-base-content font-semibold">{{ $t('ibc.txhash') }}</th>
+              <th class="text-base-content font-semibold">{{ $t('ibc.messages') }}</th>
+              <th class="text-base-content font-semibold">{{ $t('ibc.time') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(resp, index) in txs?.tx_responses as TxResponse[]" :key="index">
+              <td>{{ resp.height }}</td>
+              <td>
+                <div class="text-sm truncate link link-hover text-primary">
+                  <RouterLink :to="`/${chainStore.chainName}/tx/${resp.txhash}`">{{ resp.txhash }} </RouterLink>
+                </div>
+              </td>
+              <td>
+                <div class="flex">
+                  {{ format.messages(resp.tx.body.messages) }}
+                  <Icon v-if="resp.code === 0" icon="mdi-check" class="text-success text-lg" />
+                  <Icon v-else icon="mdi-multiply" class="text-error text-lg" />
+                </div>
+              </td>
+              <td>{{ format.toLocaleDate(resp.timestamp) }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <PaginationBar :limit="page.limit" :total="txs.pagination?.total" :callback="pageload" class="mt-4" />
+      </div>
     </div>
 
     <div v-show="tab === 'query'">
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
         <div class="flex items-center justify-between px-3 pt-2 mb-4">
-          <div class="text-lg font-semibold">{{ $t('cosmwasm.suggested_messages') }}</div>
+          <div class="text-xl font-semibold text-base-content">{{ $t('cosmwasm.suggested_messages') }}</div>
         </div>
         <div class="px-3">
           <div>
             <div>
-              <span v-for="q in queries" class="btn btn-xs mx-1" @click="selectQuery(q)">{{ q }}</span>
+              <span v-for="q in queries" :key="q" class="btn btn-xs btn-outline btn-primary rounded-btn text-primary-content mx-1" @click="selectQuery(q)">{{ q }}</span>
             </div>
             <textarea
               v-model="query"
               placeholder="Query String, {}"
               label="Query String"
-              class="my-2 textarea textarea-bordered w-full"
+              class="my-2 textarea textarea-bordered w-full text-base-content"
             />
 
             <div class="mt-4 mb-4 text-center">
-              <button class="btn btn-primary btn-sm px-4 text-white" @click="queryContract()">
+              <button class="btn btn-primary btn-sm px-4 text-primary-content" @click="queryContract()">
                 {{ $t('cosmwasm.btn_query') }}
               </button>
             </div>
@@ -311,24 +315,24 @@ const tab = ref('detail');
     </div>
 
     <div v-show="tab === 'execute'">
-      <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+      <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
         <div class="flex items-center justify-between px-3 pt-2 mb-4">
-          <div class="text-lg font-semibold">{{ $t('cosmwasm.suggested_messages') }}</div>
+          <div class="text-xl font-semibold text-base-content">{{ $t('cosmwasm.suggested_messages') }}</div>
         </div>
         <div class="px-3">
           <div>
             <div>
-              <span v-for="q in queries" class="btn btn-xs mx-1" @click="selectQuery(q)">{{ q }}</span>
+              <span v-for="q in queries" :key="q" class="btn btn-xs btn-outline btn-primary rounded-btn text-primary-content mx-1" @click="selectQuery(q)">{{ q }}</span>
             </div>
             <textarea
               v-model="query"
               placeholder="Query String, {}"
               label="Query String"
-              class="my-2 textarea textarea-bordered w-full"
+              class="my-2 textarea textarea-bordered w-full text-base-content"
             />
 
             <div class="mt-4 mb-4 text-center">
-              <button class="btn btn-primary btn-sm px-4 text-white" @click="queryContract()">
+              <button class="btn btn-primary btn-sm px-4 text-primary-content" @click="queryContract()">
                 {{ $t('cosmwasm.btn_execute') }}
               </button>
             </div>
@@ -337,9 +341,9 @@ const tab = ref('detail');
       </div>
     </div>
 
-    <div v-if="tab === 'execute' || tab === 'query'" class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div v-if="tab === 'execute' || tab === 'query'" class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
       <div class="flex items-center justify-between px-3 pt-2 mb-4">
-        <div class="text-lg font-semibold">{{ $t('cosmwasm.result') }}</div>
+        <div class="text-xl font-semibold text-base-content">{{ $t('cosmwasm.result') }}</div>
       </div>
       <JsonViewer
         :value="result"

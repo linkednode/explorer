@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useDashboard, useBlockchain } from '@/stores';
-import type { ChainConfig } from '@/types/chaindata';
+import type { ChainConfig, DenomUnit } from '@/types/chaindata';
 import { CosmosRestClient } from '@/libs/client';
 import { onMounted } from 'vue';
 import AdBanner from '@/components/ad/AdBanner.vue';
@@ -14,8 +14,9 @@ const selected = ref({} as ChainConfig);
 onMounted(() => {
   const chainStore = useBlockchain();
   selected.value = chainStore.current || Object.values(dashboard.chains)[0];
+  initParamsForUnisat();
 });
-async function initParamsForKeplr() {
+async function initParamsForUnisat() {
   const chain = selected.value;
   if (!chain.endpoints?.rest?.at(0)) throw new Error('Endpoint does not set');
   const client = CosmosRestClient.newDefault(chain.endpoints.rest?.at(0)?.address || '');
@@ -28,7 +29,7 @@ async function initParamsForKeplr() {
     high: 0.03,
   };
   const coinDecimals =
-    chain.assets[0].denom_units.find((x) => x.denom === chain.assets[0].symbol.toLowerCase())?.exponent || 6;
+    chain.assets[0].denom_units.find((x: DenomUnit) => x.denom === chain.assets[0].symbol.toLowerCase())?.exponent || 6;
   conf.value = JSON.stringify(
     {
       chainId: chainid,
@@ -90,23 +91,35 @@ function suggest() {
 </script>
 
 <template>
-  <div class="bg-base-100 p-4 rounded text-center">
-    <AdBanner id="keplr-banner-ad" unit="banner" width="970px" height="90px" />
-    <div class="flex">
-      <select v-model="selected" class="select select-bordered mx-5" @change="initParamsForKeplr">
-        <option v-for="c in dashboard.chains" :value="c">
+  <div class="bg-base-100 shadow-md rounded-box p-4 text-center">
+    <AdBanner id="unisat-banner-ad" unit="banner" width="970px" height="90px" />
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 my-6">
+      <select v-model="selected" class="select select-bordered w-full max-w-xs bg-base-200 text-base-content" @change="initParamsForUnisat">
+        <option v-for="c in dashboard.chains" :value="c" :key="c.chainName">
           {{ c.chainName }}
         </option>
       </select>
-      <button class="btn !bg-yes !border-yes text-white px-10" @click="suggest">
+      <button class="btn btn-primary capitalize text-primary-content w-full sm:w-auto" @click="suggest">
         Add {{ selected.chainName }} TO Unisat Wallet
       </button>
     </div>
-    <div class="text-main mt-5">
-      <textarea v-model="conf" class="textarea textarea-bordered w-full" rows="15"></textarea>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text text-base-content">{{ $t('wallet.config_json') }}</span>
+      </label>
+      <textarea v-model="conf" class="textarea textarea-bordered h-64 bg-base-200 text-base-content font-mono text-xs" readonly></textarea>
     </div>
-    <div class="mt-4 mb-4">
-      If the chain is not offically support on Keplr, you can submit these parameters to enable Keplr.
-    </div>
+    <p class="text-sm text-neutral-content mt-4">
+      {{ $t('wallet.unisat_info') }}
+    </p>
   </div>
 </template>
+
+<route>
+    {
+      meta: {
+        i18n: false,
+        order: 102
+      }
+    }
+</route>

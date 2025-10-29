@@ -52,27 +52,31 @@ function showPubkey(v: any) {
 }
 </script>
 <template>
-  <div class="overflow-x-auto">
-    <table class="table table-compact">
-      <thead>
-        <tr>
-          <td>{{ $t('account.type') }}</td>
-          <td>{{ $t('account.address') }}</td>
-          <td>{{ $t('account.acc_num') }}</td>
-          <td>{{ $t('account.sequence') }}</td>
-          <td>{{ $t('account.pub_key') }}</td>
-        </tr>
-      </thead>
-      <tr v-for="acc in accounts">
-        <td>{{ showType(acc['@type']) }}</td>
-        <td>
-          <RouterLink :to="`/${chain}/account/${showAddress(acc)}`">{{ showAddress(acc) }}</RouterLink>
-        </td>
-        <td>{{ showAccountNumber(acc) }}</td>
-        <td>{{ showSequence(acc) }}</td>
-        <td>{{ showPubkey(acc) }}</td>
-      </tr>
-    </table>
-    <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" />
+  <div class="bg-base-100 shadow-md rounded-box p-4">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full table-zebra">
+        <thead>
+          <tr>
+            <th class="text-base-content font-semibold">{{ $t('account.type') }}</th>
+            <th class="text-base-content font-semibold">{{ $t('account.address') }}</th>
+            <th class="text-base-content font-semibold">{{ $t('account.acc_num') }}</th>
+            <th class="text-base-content font-semibold">{{ $t('account.sequence') }}</th>
+            <th class="text-base-content font-semibold">{{ $t('account.pub_key') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="acc in accounts" :key="showAddress(acc)">
+            <td class="text-base-content">{{ showType(acc['@type']) }}</td>
+            <td>
+              <RouterLink :to="`/${chain}/account/${showAddress(acc)}`" class="link link-hover text-primary">{{ showAddress(acc) }}</RouterLink>
+            </td>
+            <td class="text-base-content">{{ showAccountNumber(acc) }}</td>
+            <td class="text-base-content">{{ showSequence(acc) }}</td>
+            <td class="text-base-content">{{ showPubkey(acc) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <PaginationBar :limit="pageRequest.limit" :total="pageResponse.total" :callback="pageload" class="mt-4" />
   </div>
 </template>

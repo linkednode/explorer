@@ -18,7 +18,7 @@ function openSearchModal() {
   searchModalShow.value = true;
 }
 
-function preventClick(event: any) {
+function preventClick(event: MouseEvent) {
   event.preventDefault();
   event.stopPropagation();
 }
@@ -62,7 +62,7 @@ function confirm() {
 <template>
   <div>
     <button class="btn btn-ghost btn-circle btn-sm mx-1" @click="openSearchModal">
-      <Icon icon="mdi:magnify" class="text-2xl text-gray-500 dark:text-gray-400" />
+      <Icon icon="mdi:magnify" class="text-2xl text-base-content" />
     </button>
 
     <!-- modal -->
@@ -71,22 +71,22 @@ function confirm() {
       class="cursor-pointer modal !pointer-events-auto !opacity-100 !visible"
       @click="closeSearchModal"
     >
-      <div class="relative modal-box cursor-default" @click="(event) => preventClick(event)">
+      <div class="relative modal-box cursor-default bg-base-100 rounded-box" @click="(event) => preventClick(event)">
         <!-- header -->
         <div class="flex items-center justify-between">
-          <div class="text-lg font-bold flex flex-col md:!flex-row justify-between items-baseline">
+          <div class="text-lg font-bold flex flex-col md:!flex-row justify-between items-baseline text-base-content">
             <span class="mr-2">Search</span>
-            <span class="capitalize text-sm md:!text-base">Height/Transaction/Account Address</span>
+            <span class="capitalize text-sm md:!text-base text-neutral-content">Height/Transaction/Account Address</span>
           </div>
           <label htmlFor="modal-pool-modal" class="cursor-pointer" @click="closeSearchModal">
-            <Icon icon="zondicons:close-outline" class="text-2xl text-gray-500 dark:text-gray-400" />
+            <Icon icon="zondicons:close-outline" class="text-2xl text-base-content" />
           </label>
         </div>
         <!-- body -->
         <div class="mt-4">
           <div class="">
             <input
-              class="input flex-1 w-full !input-bordered"
+              class="input flex-1 w-full input-bordered"
               v-model="searchQuery"
               placeholder="Height/Transaction/Account Address"
             />

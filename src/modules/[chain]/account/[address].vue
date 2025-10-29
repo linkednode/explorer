@@ -122,7 +122,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
 <template>
   <div v-if="account">
     <!-- address -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
       <div class="flex items-center">
         <!-- img -->
         <div class="inline-flex relative w-11 h-11 rounded-md">
@@ -133,24 +133,24 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
         </div>
         <!-- content -->
         <div class="flex flex-1 flex-col truncate pl-4">
-          <h2 class="text-sm card-title">{{ $t('account.address') }}:</h2>
-          <span class="text-xs truncate"> {{ address }}</span>
+          <h2 class="text-base font-semibold text-base-content">{{ $t('account.address') }}:</h2>
+          <span class="text-sm truncate text-neutral-content"> {{ address }}</span>
         </div>
       </div>
     </div>
 
     <!-- Assets -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
       <div class="flex justify-between">
-        <h2 class="card-title mb-4">{{ $t('account.assets') }}</h2>
+        <h2 class="text-xl font-semibold mb-4 text-base-content">{{ $t('account.assets') }}</h2>
         <!-- button -->
         <div class="flex justify-end mb-4 pr-5">
-          <label for="send" class="btn btn-primary btn-sm mr-2" @click="dialog.open('send', {}, updateEvent)">{{
+          <label for="send" class="btn btn-primary btn-sm mr-2 text-primary-content" @click="dialog.open('send', {}, updateEvent)">{{
             $t('account.btn_send')
           }}</label>
           <label
             for="transfer"
-            class="btn btn-primary btn-sm"
+            class="btn btn-primary btn-sm text-primary-content"
             @click="
               dialog.open(
                 'transfer',
@@ -173,70 +173,70 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
           <div class="">
             <!--balances  -->
             <div class="flex items-center px-4 mb-2" v-for="(balanceItem, index) in balances" :key="index">
-              <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
+              <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center relative mr-4">
                 <Icon icon="mdi-account-cash" class="text-info" size="20" />
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-info opacity-20"></div>
               </div>
               <div class="flex-1">
-                <div class="text-sm font-semibold">
+                <div class="text-base font-semibold text-base-content">
                   {{ format.formatToken(balanceItem) }}
                 </div>
-                <div class="text-xs">
+                <div class="text-sm text-neutral-content">
                   {{ format.calculatePercent(balanceItem.amount, totalAmount) }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
-                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"></span>
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary-content bg-primary mr-2">
+                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"></span>
                 ${{ format.tokenValue(balanceItem) }}
               </div>
             </div>
             <!--delegations  -->
             <div class="flex items-center px-4 mb-2" v-for="(delegationItem, index) in delegations" :key="index">
-              <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
+              <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center relative mr-4">
                 <Icon icon="mdi-user-clock" class="text-warning" size="20" />
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-warning opacity-20"></div>
               </div>
               <div class="flex-1">
-                <div class="text-sm font-semibold">
+                <div class="text-base font-semibold text-base-content">
                   {{ format.formatToken(delegationItem?.balance) }}
                 </div>
-                <div class="text-xs">
+                <div class="text-sm text-neutral-content">
                   {{ format.calculatePercent(delegationItem?.balance?.amount, totalAmount) }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
-                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"></span>
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary-content bg-primary mr-2">
+                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary text-sm"></span>
                 ${{ format.tokenValue(delegationItem?.balance) }}
               </div>
             </div>
             <!-- rewards.total -->
             <div class="flex items-center px-4 mb-2" v-for="(rewardItem, index) in rewards.total" :key="index">
-              <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
+              <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center relative mr-4">
                 <Icon icon="mdi-account-arrow-up" class="text-success" size="20" />
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-success opacity-20"></div>
               </div>
               <div class="flex-1">
-                <div class="text-sm font-semibold">
+                <div class="text-base font-semibold text-base-content">
                   {{ format.formatToken(rewardItem) }}
                 </div>
-                <div class="text-xs">
+                <div class="text-sm text-neutral-content">
                   {{ format.calculatePercent(rewardItem.amount, totalAmount) }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
-                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert text-sm"></span>${{
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary-content bg-primary mr-2">
+                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>${{
                   format.tokenValue(rewardItem)
                 }}
               </div>
             </div>
             <!-- mdi-account-arrow-right -->
             <div class="flex items-center px-4">
-              <div class="w-9 h-9 rounded overflow-hidden flex items-center justify-center relative mr-4">
+              <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center relative mr-4">
                 <Icon icon="mdi-account-arrow-right" class="text-error" size="20" />
                 <div class="absolute top-0 bottom-0 left-0 right-0 bg-error opacity-20"></div>
               </div>
               <div class="flex-1">
-                <div class="text-sm font-semibold">
+                <div class="text-base font-semibold text-base-content">
                   {{
                     format.formatToken({
                       amount: String(unbondingTotal),
@@ -244,12 +244,12 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                     })
                   }}
                 </div>
-                <div class="text-xs">
+                <div class="text-sm text-neutral-content">
                   {{ format.calculatePercent(unbondingTotal, totalAmount) }}
                 </div>
               </div>
-              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary dark:invert mr-2">
-                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary dark:invert"></span>
+              <div class="text-xs truncate relative py-1 px-3 rounded-full w-fit text-primary-content bg-primary mr-2">
+                <span class="inset-x-0 inset-y-0 opacity-10 absolute bg-primary"></span>
                 ${{
                   format.tokenValue({
                     amount: String(unbondingTotal),
@@ -260,7 +260,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
             </div>
           </div>
           <div
-            class="mt-4 text-lg font-semibold mr-5 pl-5 border-t pt-4 text-right"
+            class="mt-4 text-xl font-bold mr-5 pl-5 border-t border-base-300 pt-4 text-right text-base-content"
           >
             {{ $t('account.total_value') }}: ${{ totalValue }}
           </div>
@@ -269,14 +269,14 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
     </div>
 
     <!-- Delegations -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
       <div class="flex justify-between">
-        <h2 class="card-title mb-4">{{ $t('account.delegations') }}</h2>
+        <h2 class="text-xl font-semibold mb-4 text-base-content">{{ $t('account.delegations') }}</h2>
         <div class="flex justify-end mb-4">
-          <label for="delegate" class="btn btn-primary btn-sm mr-2" @click="dialog.open('delegate', {}, updateEvent)">{{
+          <label for="delegate" class="btn btn-primary btn-sm mr-2 text-primary-content" @click="dialog.open('delegate', {}, updateEvent)">{{
             $t('account.btn_delegate')
           }}</label>
-          <label for="withdraw" class="btn btn-primary btn-sm" @click="dialog.open('withdraw', {}, updateEvent)">{{
+          <label for="withdraw" class="btn btn-primary btn-sm text-primary-content" @click="dialog.open('withdraw', {}, updateEvent)">{{
             $t('account.btn_withdraw')
           }}</label>
         </div>
@@ -285,28 +285,28 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
         <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
-              <th class="py-3">{{ $t('account.validator') }}</th>
-              <th class="py-3">{{ $t('account.delegation') }}</th>
-              <th class="py-3">{{ $t('account.rewards') }}</th>
-              <th class="py-3">{{ $t('account.action') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.validator') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.delegation') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.rewards') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.action') }}</th>
             </tr>
           </thead>
-          <tbody class="text-sm">
+          <tbody class="text-base-content text-sm">
             <tr v-if="delegations.length === 0">
               <td colspan="10">
-                <div class="text-center">{{ $t('account.no_delegations') }}</div>
+                <div class="text-center text-neutral-content">{{ $t('account.no_delegations') }}</div>
               </td>
             </tr>
             <tr v-for="(v, index) in delegations" :key="index">
-              <td class="text-caption text-primary py-3">
+              <td class="text-base-content link link-hover text-primary py-3">
                 <RouterLink :to="`/${chain}/staking/${v.delegation.validator_address}`">{{
                   format.validatorFromBech32(v.delegation.validator_address) || v.delegation.validator_address
                 }}</RouterLink>
               </td>
-              <td class="py-3">
+              <td class="py-3 text-base-content">
                 {{ format.formatToken(v.balance, true, '0,0.[000000]') }}
               </td>
-              <td class="py-3">
+              <td class="py-3 text-base-content">
                 {{
                   format.formatTokens(
                     rewards?.rewards?.find((x) => x.validator_address === v.delegation.validator_address)?.reward
@@ -317,7 +317,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                 <div v-if="v.balance" class="flex justify-end">
                   <label
                     for="delegate"
-                    class="btn btn-primary btn-xs mr-2"
+                    class="btn btn-primary btn-xs rounded-btn mr-2 text-primary-content"
                     @click="
                       dialog.open(
                         'delegate',
@@ -331,7 +331,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   >
                   <label
                     for="redelegate"
-                    class="btn btn-primary btn-xs mr-2"
+                    class="btn btn-primary btn-xs rounded-btn mr-2 text-primary-content"
                     @click="
                       dialog.open(
                         'redelegate',
@@ -345,7 +345,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
                   >
                   <label
                     for="unbond"
-                    class="btn btn-primary btn-xs"
+                    class="btn btn-primary btn-xs rounded-btn text-primary-content"
                     @click="
                       dialog.open(
                         'unbond',
@@ -366,21 +366,21 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
     </div>
 
     <!-- Unbonding Delegations -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow" v-if="unbonding && unbonding.length > 0">
-      <h2 class="card-title mb-4">{{ $t('account.unbonding_delegations') }}</h2>
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4" v-if="unbonding && unbonding.length > 0">
+      <h2 class="text-xl font-semibold mb-4 text-base-content">{{ $t('account.unbonding_delegations') }}</h2>
       <div class="overflow-x-auto">
-        <table class="table text-sm w-full">
+        <table class="table text-sm w-full table-zebra">
           <thead>
             <tr>
-              <th class="py-3">{{ $t('account.creation_height') }}</th>
-              <th class="py-3">{{ $t('account.initial_balance') }}</th>
-              <th class="py-3">{{ $t('account.balance') }}</th>
-              <th class="py-3">{{ $t('account.completion_time') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.creation_height') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.initial_balance') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.balance') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.completion_time') }}</th>
             </tr>
           </thead>
-          <tbody class="text-sm" v-for="(v, index) in unbonding" :key="index">
+          <tbody class="text-base-content text-sm" v-for="(v, index) in unbonding" :key="index">
             <tr>
-              <td class="text-caption text-primary py-3 bg-slate-200" colspan="10">
+              <td class="text-base-content link link-hover text-primary py-3 bg-base-200" colspan="10">
                 <RouterLink :to="`/${chain}/staking/${v.validator_address}`">{{ v.validator_address }}</RouterLink>
               </td>
             </tr>
@@ -420,36 +420,36 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
     </div>
 
     <!-- Transactions -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">{{ $t('account.transactions') }}</h2>
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
+      <h2 class="text-xl font-semibold mb-4 text-base-content">{{ $t('account.transactions') }}</h2>
       <div class="overflow-x-auto">
-        <table class="table w-full text-sm">
+        <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
-              <th class="py-3">{{ $t('account.height') }}</th>
-              <th class="py-3">{{ $t('account.hash') }}</th>
-              <th class="py-3">{{ $t('account.messages') }}</th>
-              <th class="py-3">{{ $t('account.time') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.height') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.hash') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.messages') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.time') }}</th>
             </tr>
           </thead>
-          <tbody class="text-sm">
+          <tbody class="text-base-content text-sm">
             <tr v-if="txs.length === 0">
               <td colspan="10">
-                <div class="text-center">{{ $t('account.no_transactions') }}</div>
+                <div class="text-center text-neutral-content">{{ $t('account.no_transactions') }}</div>
               </td>
             </tr>
             <tr v-for="(v, index) in txs" :key="index">
               <td class="text-sm py-3">
                 <RouterLink
                   :to="`/${chain}/block/${v.height}`"
-                  class="text-primary dark:invert"
+                  class="link link-hover text-primary"
                   >{{ v.height }}</RouterLink
                 >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink
                   :to="`/${chain}/tx/${v.txhash}`"
-                  class="text-primary dark:invert"
+                  class="link link-hover text-primary"
                 >
                   {{ v.txhash }}
                 </RouterLink>
@@ -463,7 +463,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               </td>
               <td class="py-3">
                 {{ format.toLocaleDate(v.timestamp) }}
-                <span class="text-xs">({{ format.toDay(v.timestamp, 'from') }})</span>
+                <span class="text-sm text-neutral-content">({{ format.toDay(v.timestamp, 'from') }})</span>
               </td>
             </tr>
           </tbody>
@@ -472,36 +472,36 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
     </div>
 
     <!-- Received -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">{{ $t('account.received') }}</h2>
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
+      <h2 class="text-xl font-semibold mb-4 text-base-content">{{ $t('account.received') }}</h2>
       <div class="overflow-x-auto">
-        <table class="table w-full text-sm">
+        <table class="table w-full text-sm table-zebra">
           <thead>
             <tr>
-              <th class="py-3">{{ $t('account.height') }}</th>
-              <th class="py-3">{{ $t('account.hash') }}</th>
-              <th class="py-3">{{ $t('account.amount') }}</th>
-              <th class="py-3">{{ $t('account.time') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.height') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.hash') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.amount') }}</th>
+              <th class="py-3 text-base-content font-semibold">{{ $t('account.time') }}</th>
             </tr>
           </thead>
-          <tbody class="text-sm">
+          <tbody class="text-base-content text-sm">
             <tr v-if="recentReceived.length === 0">
               <td colspan="10">
-                <div class="text-center">{{ $t('account.no_transactions') }}</div>
+                <div class="text-center text-neutral-content">{{ $t('account.no_transactions') }}</div>
               </td>
             </tr>
             <tr v-for="(v, index) in recentReceived" :key="index">
               <td class="text-sm py-3">
                 <RouterLink
                   :to="`/${chain}/block/${v.height}`"
-                  class="text-primary dark:invert"
+                  class="link link-hover text-primary"
                   >{{ v.height }}</RouterLink
                 >
               </td>
               <td class="truncate py-3" style="max-width: 200px">
                 <RouterLink
                   :to="`/${chain}/tx/${v.txhash}`"
-                  class="text-primary dark:invert"
+                  class="link link-hover text-primary"
                 >
                   {{ v.txhash }}
                 </RouterLink>
@@ -515,7 +515,7 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
               </td>
               <td class="py-3">
                 {{ format.toLocaleDate(v.timestamp) }}
-                <span class="text-xs">({{ format.toDay(v.timestamp, 'from') }})</span>
+                <span class="text-sm text-neutral-content">({{ format.toDay(v.timestamp, 'from') }})</span>
               </td>
             </tr>
           </tbody>
@@ -524,10 +524,10 @@ function mapAmount(events: { type: string; attributes: { key: string; value: str
     </div>
 
     <!-- Account -->
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title mb-4">{{ $t('account.acc') }}</h2>
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4 mb-4">
+      <h2 class="text-xl font-semibold mb-4 text-base-content">{{ $t('account.acc') }}</h2>
       <DynamicComponent :value="account" />
     </div>
   </div>
-  <div v-else class="text-no text-sm">{{ $t('account.error') }}</div>
+  <div v-else class="text-error text-base-content text-sm">{{ $t('account.error') }}</div>
 </template>

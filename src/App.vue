@@ -2,6 +2,7 @@
 import { themeChange } from 'theme-change';
 import { onMounted } from 'vue';
 import TxDialog from './components/TxDialog.vue';
+import StickyBannerDemo from './components/StickyBannerDemo.vue';
 
 onMounted(() => {
   themeChange(false);
@@ -10,6 +11,7 @@ onMounted(() => {
 
 <template>
   <div>
+    <StickyBannerDemo />
     <RouterView />
     <TxDialog />
   </div>

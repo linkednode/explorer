@@ -40,89 +40,67 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate mb-2">{{ $t('statesync.title') }}</h2>
-      <div class="text-sm">
+    <div class="bg-base-100 shadow-md rounded-box p-4 mb-6">
+      <h2 class="text-2xl font-bold text-base-content mb-3">{{ $t('statesync.title') }}</h2>
+      <p class="text-neutral-content text-base">
         {{ $t('statesync.description') }}
-        <a class="text-primary lowercase" href="https://blog.cosmos.network/cosmos-sdk-state-sync-guide-99e4cf43be2f"
+        <a class="text-primary link link-hover lowercase" href="https://blog.cosmos.network/cosmos-sdk-state-sync-guide-99e4cf43be2f" target="_blank" rel="noopener noreferrer"
           >{{ $t('statesync.here') }}&nbsp;</a
         >
-        <a class="lowercase"> {{ $t('statesync.for_more_info') }}.</a>
-      </div>
+        <span class="lowercase"> {{ $t('statesync.for_more_info') }}.</span>
+      </p>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded mb-4 shadow">
-      <h2 class="card-title truncate mb-2">
-        {{ $t('statesync.title_2') }}
-      </h2>
-      <div class="text-sm">
-        1. {{ $t('statesync.text_1') }} ({{ appName }}
-        {{ $t('statesync.version') }}:
-        {{ nodeInfo.application_version?.version || '' }})
-        <br />
-        {{ $t('statesync.text_1_1') }}.
-        <br />
-        <br />
-        2. {{ $t('statesync.text_2') }}<br />
-        {{ $t('statesync.text_2_1') }}. <br /><br />
-        <div class="mockup-code bg-base-200 my-2">
-          <pre
-            data-prefix=">"
-          ><code class="text-gray-800 dark:invert">[state-sync]</code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-gray-800 dark:invert">enable = true</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800"></code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-gray-800 dark:invert">rpc_servers = "{{ rpcs }}"</code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-gray-800 dark:invert">trust_height = {{ height }} </code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-gray-800 dark:invert">trust_hash = "{{ hash }}"</code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-gray-800 dark:invert"></code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-green-400"># 2/3 of unbonding time</code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-gray-800 dark:invert">trust_period = "168h"</code></pre>
+    <div class="bg-base-100 shadow-md rounded-box p-4 mb-6">
+      <h2 class="text-xl font-bold text-base-content mb-4">{{ $t('statesync.title_2') }}</h2>
+      <div class="text-neutral-content text-base space-y-4">
+        <p>
+          1. {{ $t('statesync.text_1') }} ({{ appName }}
+          {{ $t('statesync.version') }}:
+          <span class="font-semibold">{{ nodeInfo.application_version?.version || '' }}</span
+          >)<br />
+          {{ $t('statesync.text_1_1') }}.
+        </p>
+        <p>
+          2. {{ $t('statesync.text_2') }}<br />
+          {{ $t('statesync.text_2_1') }}.
+        </p>
+        <div class="mockup-code bg-base-200 text-base-content my-4">
+          <pre data-prefix=">"><code class="text-info">[state-sync]</code></pre>
+          <pre data-prefix=">"><code class="text-info">enable = true</code></pre>
+          <pre data-prefix=">"><code class="text-info"></code></pre>
+          <pre data-prefix=">"><code class="text-info">rpc_servers = "{{ rpcs }}"</code></pre>
+          <pre data-prefix=">"><code class="text-info">trust_height = {{ height }} </code></pre>
+          <pre data-prefix=">"><code class="text-info">trust_hash = "{{ hash }}"</code></pre>
+          <pre data-prefix=">"><code class="text-info"></code></pre>
+          <pre data-prefix=">"><code class="text-success"># 2/3 of unbonding time</code></pre>
+          <pre data-prefix=">"><code class="text-info">trust_period = "168h"</code></pre>
         </div>
-        <br />
-        3. {{ $t('statesync.text_3') }}:
-        <code class="bg-base-200 text-gray-600 px-2 py-px mx-1 rounded shadow">{{ appName }} start</code>
-        <br />
-        {{ $t('statesync.text_3_1') }}
-        <code class="bg-base-200 text-gray-600 px-2 py-px mx-1 rounded shadow">{{ appName }} unsafe-reset-all</code> or
-        <code class="bg-base-200 text-gray-600 px-2 py-px mx-1 rounded shadow"
-          >{{ appName }} tendermint unsafe-reset-all --home ~/.HOME</code
-        >
-        {{ $t('statesync.text_3_2') }}.
+        <p>
+          3. {{ $t('statesync.text_3') }}:
+          <code class="bg-base-200 text-primary px-2 py-1 mx-1 rounded-md shadow-sm">{{ appName }} start</code>
+          <br />
+          {{ $t('statesync.text_3_1') }}
+          <code class="bg-base-200 text-primary px-2 py-1 mx-1 rounded-md shadow-sm">{{ appName }} unsafe-reset-all</code> or
+          <code class="bg-base-200 text-primary px-2 py-1 mx-1 rounded-md shadow-sm"
+            >{{ appName }} tendermint unsafe-reset-all --home ~/.HOME</code
+          >
+          {{ $t('statesync.text_3_2') }}.
+        </p>
       </div>
     </div>
 
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
-      <h2 class="card-title truncate mb-2">{{ $t('statesync.title_3') }}</h2>
-      <div class="text-sm">
-        {{ $t('statesync.text_title_3') }}
-        <br /><br />
-        <div class="mockup-code bg-base-200 my-2">
-          <pre
-            data-prefix=">"
-          ><code class="text-green-400"># snapshot-interval specifies the block interval at which local state sync snapshots are</code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-green-400"># taken (0 to disable). Must be a multiple of pruning-keep-every.</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">snapshot-interval = 1000</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert"></code></pre>
-          <pre
-            data-prefix=">"
-          ><code class="text-green-400"># snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all). Each snapshot is about 500MiB</code></pre>
-          <pre data-prefix=">"><code class="text-gray-800 dark:invert">snapshot-keep-recent = 2</code></pre>
+    <div class="bg-base-100 shadow-md rounded-box p-4">
+      <h2 class="text-xl font-bold text-base-content mb-4">{{ $t('statesync.title_3') }}</h2>
+      <div class="text-neutral-content text-base space-y-4">
+        <p>{{ $t('statesync.text_title_3') }}</p>
+        <div class="mockup-code bg-base-200 text-base-content my-4">
+          <pre data-prefix=">"><code class="text-success"># snapshot-interval specifies the block interval at which local state sync snapshots are</code></pre>
+          <pre data-prefix=">"><code class="text-success"># taken (0 to disable). Must be a multiple of pruning-keep-every.</code></pre>
+          <pre data-prefix=">"><code class="text-info">snapshot-interval = 1000</code></pre>
+          <pre data-prefix=">"><code class="text-info"></code></pre>
+          <pre data-prefix=">"><code class="text-success"># snapshot-keep-recent specifies the number of recent snapshots to keep and serve (0 to keep all). Each snapshot is about 500MiB</code></pre>
+          <pre data-prefix=">"><code class="text-info">snapshot-keep-recent = 2</code></pre>
         </div>
       </div>
     </div>

@@ -74,31 +74,37 @@ function pageload(p: number) {
 }
 </script>
 <template>
-  <div class="overflow-auto bg-base-100">
-    <table class="table table-compact">
-      <thead class="bg-base-200">
-        <tr>
-          <td>Logo</td>
-          <td>Token</td>
-          <td>Amount</td>
-          <td>Info</td>
-          <td>Base</td>
-        </tr>
-      </thead>
-      <tr v-for="item in list" class="hover">
-        <td>
-          <img v-if="item.logo" :src="item.logo" class="w-7 h-7" />
-        </td>
-        <td>{{ item.denom }}</td>
-        <td>{{ item.amount }}</td>
-        <td>{{ item.info }}</td>
-        <td>{{ item.base }}</td>
-      </tr>
-    </table>
+  <div class="bg-base-100 shadow-md rounded-box p-4">
+    <div class="overflow-x-auto">
+      <table class="table w-full table-zebra">
+        <thead class="bg-base-200">
+          <tr>
+            <th class="text-left uppercase text-base-content font-semibold">Logo</th>
+            <th class="text-left uppercase text-base-content font-semibold">Token</th>
+            <th class="text-right uppercase text-base-content font-semibold">Amount</th>
+            <th class="text-left uppercase text-base-content font-semibold">Info</th>
+            <th class="text-left uppercase text-base-content font-semibold">Base</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in list" :key="item.denom" class="hover:bg-base-200 transition-colors duration-200">
+            <td>
+              <img v-if="item.logo" :src="item.logo" class="w-7 h-7 object-contain" />
+              <div v-else class="w-7 h-7 bg-base-300 rounded-full flex items-center justify-center text-neutral-content">?</div>
+            </td>
+            <td class="text-base-content font-medium">{{ item.denom }}</td>
+            <td class="text-right text-neutral-content">{{ item.amount }}</td>
+            <td class="text-neutral-content">{{ item.info }}</td>
+            <td class="text-neutral-content">{{ item.base }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <PaginationBar
       :limit="pageRequest.limit"
       :total="pageResponse.total"
       :callback="pageload"
+      class="mt-4"
     />
   </div>
 </template>

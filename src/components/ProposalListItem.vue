@@ -35,18 +35,25 @@ const voterStatusMap: Record<string, string> = {
 const proposalInfo = ref();
 
 function metaItem(metadata: string | undefined): { title: string; summary: string } {
-  return metadata ? JSON.parse(metadata) : {};
+  if (metadata) {
+    const parsed = JSON.parse(metadata);
+    return {
+      title: parsed.title || '',
+      summary: parsed.summary || '',
+    };
+  }
+  return { title: '', summary: '' };
 }
 </script>
 <template>
-  <div class="bg-white dark:bg-[#28334e] rounded text-sm">
+  <div class="bg-base-100 shadow-md rounded-box text-base-content text-sm">
     <table class="table-compact w-full table-fixed hidden lg:!table">
       <tbody>
         <tr v-for="(item, index) in proposals?.proposals" :key="index">
           <td class="px-4 w-20">
             <label
               for="proposal-detail-modal"
-              class="text-main text-base hover:text-indigo-400 cursor-pointer"
+              class="text-primary hover:text-primary-focus cursor-pointer font-medium"
               @click="proposalInfo = item"
             >
               #{{ item?.proposal_id }}</label
@@ -56,7 +63,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
             <div>
               <RouterLink
                 :to="`/${chain.chainName}/gov/${item?.proposal_id}`"
-                class="text-main text-base mb-1 block hover:text-indigo-400 truncate"
+                class="text-base-content text-base mb-1 block hover:text-primary truncate font-medium"
               >
                 {{
                   item?.content?.title ||
@@ -66,7 +73,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
               </RouterLink>
               <div
                 v-if="item.content"
-                class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+                class="badge badge-outline badge-primary text-xs mb-1"
               >
                 {{ showType(item.content['@type']) }}
               </div>
@@ -81,9 +88,9 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 class="flex items-center"
                 :class="
                   statusMap?.[item?.status] === 'PASSED'
-                    ? 'text-yes'
+                    ? 'text-success'
                     : statusMap?.[item?.status] === 'REJECTED'
-                    ? 'text-no'
+                    ? 'text-error'
                     : 'text-info'
                 "
               >
@@ -91,9 +98,9 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                   class="w-1 h-1 rounded-full mr-2"
                   :class="
                     statusMap?.[item?.status] === 'PASSED'
-                      ? 'bg-yes'
+                      ? 'bg-success'
                       : statusMap?.[item?.status] === 'REJECTED'
-                      ? 'bg-no'
+                      ? 'bg-error'
                       : 'bg-info'
                   "
                 ></div>
@@ -102,7 +109,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 </div>
               </div>
               <div
-                class="truncate col-span-2 md:!col-span-1 text-xs text-gray-500 dark:text-gray-400 text-right md:!flex md:!justify-start"
+                class="truncate col-span-2 md:!col-span-1 text-xs text-neutral-content text-right md:!flex md:!justify-start"
               >
                 {{ format.toDay(item.voting_end_time, 'from') }}
               </div>
@@ -113,7 +120,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
             <div class="">
               <label
                 for="vote"
-                class="btn btn-xs btn-primary rounded-sm"
+                class="btn btn-xs btn-primary rounded-btn"
                 @click="
                   dialog.open('vote', {
                     proposal_id: item?.proposal_id,
@@ -133,14 +140,14 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
     </table>
 
     <div class="lg:!hidden">
-      <div v-for="(item, index) in proposals?.proposals" :key="index" class="px-4 py-4">
-        <div class="text-main text-base mb-1 flex justify-between hover:text-indigo-400">
-          <RouterLink :to="`/${chain.chainName}/gov/${item?.proposal_id}`" class="flex-1 w-0 truncate mr-4">{{
+      <div v-for="(item, index) in proposals?.proposals" :key="index" class="px-4 py-4 bg-base-200 rounded-box shadow-sm mb-3">
+        <div class="text-base-content text-base mb-1 flex justify-between hover:text-primary">
+          <RouterLink :to="`/${chain.chainName}/gov/${item?.proposal_id}`" class="flex-1 w-0 truncate mr-4 font-medium">{{
             item?.content?.title || item?.title || metaItem(item?.metadata)?.title
           }}</RouterLink>
           <label
             for="proposal-detail-modal"
-            class="text-main text-base hover:text-indigo-400 cursor-pointer"
+            class="text-primary hover:text-primary-focus cursor-pointer font-medium"
             @click="proposalInfo = item"
           >
             #{{ item?.proposal_id }}</label
@@ -151,13 +158,13 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
           <div class="col-span-2">
             <div
               v-if="item.content"
-              class="bg-[#f6f2ff] text-[#9c6cff] dark:bg-gray-600 dark:text-gray-300 inline-block rounded-full px-2 py-[1px] text-xs mb-1"
+              class="badge badge-outline badge-primary text-xs mb-1"
             >
               {{ showType(item.content['@type']) }}
             </div>
           </div>
 
-          <div class="truncate text-xs text-gray-500 dark:text-gray-400 flex items-center justify-end">
+          <div class="truncate text-xs text-neutral-content flex items-center justify-end">
             {{ format.toDay(item.voting_end_time, 'from') }}
           </div>
         </div>
@@ -172,9 +179,9 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
               class="flex items-center"
               :class="
                 statusMap?.[item?.status] === 'PASSED'
-                  ? 'text-yes'
+                  ? 'text-success'
                   : statusMap?.[item?.status] === 'REJECTED'
-                  ? 'text-no'
+                  ? 'text-error'
                   : 'text-info'
               "
             >
@@ -182,9 +189,9 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
                 class="w-1 h-1 rounded-full mr-2"
                 :class="
                   statusMap?.[item?.status] === 'PASSED'
-                    ? 'bg-yes'
+                    ? 'bg-success'
                     : statusMap?.[item?.status] === 'REJECTED'
-                    ? 'bg-no'
+                    ? 'bg-error'
                     : 'bg-info'
                 "
               ></div>
@@ -194,7 +201,7 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
             </div>
             <label
               for="vote"
-              class="btn btn-xs btn-primary rounded-sm"
+              class="btn btn-xs btn-primary rounded-btn"
               @click="
                 dialog.open('vote', {
                   proposal_id: item?.proposal_id,
@@ -214,9 +221,9 @@ function metaItem(metadata: string | undefined): { title: string; summary: strin
 
     <input type="checkbox" id="proposal-detail-modal" class="modal-toggle" />
     <label for="proposal-detail-modal" class="modal">
-      <label class="modal-box !w-11/12 !max-w-5xl" for="">
+      <label class="modal-box !w-11/12 !max-w-5xl bg-base-100 rounded-box" for="">
         <label for="proposal-detail-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-        <h3 class="font-bold text-lg">Description</h3>
+        <h3 class="font-bold text-xl text-base-content">Description</h3>
         <p class="py-4">
           <Component
             v-if="

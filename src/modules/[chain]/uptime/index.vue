@@ -201,46 +201,43 @@ function changeTab(v: string) {
 
 <template>
   <div>
-    <div class="tabs tabs-boxed bg-transparent mb-4">
-      <a class="tab text-gray-400 capitalize" :class="{ 'tab-active': tab === '3' }" @click="changeTab('3')">{{
+    <div class="tabs tabs-boxed bg-base-200 mb-6">
+      <a role="tab" class="tab text-neutral-content capitalize" :class="{ 'tab-active': tab === '3' }" @click="changeTab('3')">{{
         $t('uptime.overall')
       }}</a>
-      <a class="tab text-gray-400 capitalize" :class="{ 'tab-active': tab === '2' }" @click="changeTab('2')">{{
+      <a role="tab" class="tab text-neutral-content capitalize" :class="{ 'tab-active': tab === '2' }" @click="changeTab('2')">{{
         $t('module.blocks')
       }}</a>
       <RouterLink :to="`/${chain}/uptime/customize`">
-        <a class="tab text-gray-400 capitalize">{{ $t('uptime.customize') }}</a>
+        <a role="tab" class="tab text-neutral-content capitalize">{{ $t('uptime.customize') }}</a>
       </RouterLink>
     </div>
-    <div class="bg-base-100 px-5 pt-5">
-      <div class="flex items-center gap-x-4">
+    <div class="bg-base-100 shadow-md rounded-box p-4">
+      <div class="flex items-center gap-x-4 mb-6">
         <input
           type="text"
           v-model="keyword"
-          placeholder="Keywords to filter validators"
-          class="input input-sm w-full flex-1 border border-gray-200 dark:border-gray-600"
+          :placeholder="$t('uptime.filter_validator_placeholder')"
+          class="input input-bordered input-sm w-full flex-1 bg-base-200 text-base-content"
         />
       </div>
 
-      <!-- grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 mt-4 -->
       <div :class="tab === '2' ? '' : 'hidden'">
-        <div class="flex flex-row flex-wrap gap-x-4 mt-4 justify-center">
-          <div v-for="(unit, i) in grid" :key="i">
-            <div class="flex justify-between py-0 w-[248px]">
-              <label class="truncate text-sm">
-                <span class="ml-1 text-black dark:text-white"
-                  >{{ i + 1 }}.{{ unit.moniker }}</span
-                >
-              </label>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4 justify-center">
+          <div v-for="(unit, i) in grid" :key="i" class="bg-base-200 rounded-box p-3 shadow-sm">
+            <div class="flex justify-between items-center mb-2">
+              <RouterLink :to="`/${chain}/staking/${unit.base64}`" class="truncate text-base-content font-medium text-sm link link-hover">
+                {{ i + 1 }}. {{ unit.moniker }}
+              </RouterLink>
               <div
                 v-if="Number(unit?.missed_blocks_counter || 0) > 10"
-                class="badge badge-sm bg-transparent border-0 text-red-500 font-bold"
+                class="badge badge-error badge-outline text-error-content font-bold"
               >
                 {{ unit?.missed_blocks_counter }}
               </div>
               <div
                 v-else
-                class="badge badge-sm bg-transparent text-green-600 border-0 font-bold"
+                class="badge badge-success badge-outline text-success-content font-bold"
               >
                 {{ unit?.missed_blocks_counter }}
               </div>
@@ -248,72 +245,82 @@ function changeTab(v: string) {
             <UptimeBar :blocks="unit.blocks" />
           </div>
         </div>
-        <div class="mt-5 text-xs flex justify-center gap-2">
-          <span class="font-bold">{{ $t('uptime.legend') }}: </span>
-          <span class="bg-green-500">&nbsp;</span> {{ $t('uptime.committed') }}
-          <span class="bg-yellow-500">&nbsp;</span>
-          {{ $t('uptime.precommitted') }}
-          <span class="bg-red-500">&nbsp;</span> {{ $t('uptime.missed') }}
+        <div class="mt-6 text-xs flex flex-wrap justify-center gap-4 text-neutral-content">
+          <span class="font-bold text-base-content">{{ $t('uptime.legend') }}: </span>
+          <div class="flex items-center gap-1">
+            <span class="w-4 h-4 bg-success rounded-sm"></span> {{ $t('uptime.committed') }}
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="w-4 h-4 bg-warning rounded-sm"></span>
+            {{ $t('uptime.precommitted') }}
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="w-4 h-4 bg-error rounded-sm"></span> {{ $t('uptime.missed') }}
+          </div>
         </div>
       </div>
 
-      <div :class="tab === '3' ? '' : 'hidden'" class="overflow-x-auto">
-        <table class="table table-compact w-full mt-5">
-          <thead class="capitalize bg-base-200">
+      <div :class="tab === '3' ? '' : 'hidden'" class="overflow-x-auto mt-6">
+        <table class="table w-full table-zebra">
+          <thead class="bg-base-200">
             <tr>
-              <td>{{ $t('account.validator') }}</td>
-              <td class="text-right">{{ $t('module.uptime') }}</td>
-              <td>{{ $t('uptime.last_jailed_time') }}</td>
-              <td class="text-right">{{ $t('uptime.signed_precommits') }}</td>
-              <td class="text-right">{{ $t('uptime.start_height') }}</td>
-              <td>{{ $t('uptime.tombstoned') }}</td>
+              <th class="text-left uppercase text-base-content font-semibold">{{ $t('account.validator') }}</th>
+              <th class="text-right uppercase text-base-content font-semibold">{{ $t('module.uptime') }}</th>
+              <th class="text-left uppercase text-base-content font-semibold">{{ $t('uptime.last_jailed_time') }}</th>
+              <th class="text-right uppercase text-base-content font-semibold">{{ $t('uptime.signed_precommits') }}</th>
+              <th class="text-right uppercase text-base-content font-semibold">{{ $t('uptime.start_height') }}</th>
+              <th class="text-left uppercase text-base-content font-semibold">{{ $t('uptime.tombstoned') }}</th>
             </tr>
           </thead>
-          <tr v-for="(v, i) in grid" class="hover">
-            <td>
-              <div class="truncate max-w-sm">{{ i + 1 }}. {{ v.moniker }}</div>
-            </td>
-            <td class="text-right">
-              <span :class="v.uptime && v.uptime > 0.95 ? 'text-green-500' : 'text-red-500'">
-                <div class="tooltip" :data-tip="`${v.missed_blocks_counter} missing blocks`">
-                  {{ format.percent(v.uptime) }}
-                </div>
-              </span>
-            </td>
-            <td>
-              <span
-                v-if="v.signing && !v.signing.jailed_until.startsWith('1970')"
-              >
-                <div
-                  class="tooltip"
-                  :data-tip="format.toDay(v.signing.jailed_until, 'long')"
+          <tbody>
+            <tr v-for="(v, i) in grid" :key="v.base64" class="hover:bg-base-200 transition-colors duration-200">
+              <td>
+                <RouterLink :to="`/${chain}/staking/${v.base64}`" class="truncate text-primary link link-hover" style="max-width: 200px">{{ i + 1 }}. {{ v.moniker }}</RouterLink>
+              </td>
+              <td class="text-right">
+                <span :class="v.uptime && v.uptime > 0.95 ? 'text-success' : 'text-error'">
+                  <div class="tooltip tooltip-left" :data-tip="`${v.missed_blocks_counter} missing blocks`">
+                    {{ format.percent(v.uptime) }}
+                  </div>
+                </span>
+              </td>
+              <td>
+                <span
+                  v-if="v.signing && !v.signing.jailed_until.startsWith('1970')"
+                  class="text-neutral-content"
                 >
-                  <span>{{
-                    format.toDay(v.signing.jailed_until, 'from')
-                  }}</span>
-                </div>
-              </span>
-            </td>
-            <td class="text-xs text-right">
-              <span v-if="v.signing && v.signing.jailed_until.startsWith('1970')" class="text-right">{{
-                format.percent(Number(v.signing.index_offset) / (latest - Number(v.signing.start_height)))
-              }}</span>
-              {{ v.signing?.index_offset }}
-            </td>
-            <td class="text-right">{{ v.signing?.start_height }}</td>
-            <td class="capitalize">{{ v.signing?.tombstoned }}</td>
-          </tr>
+                  <div
+                    class="tooltip tooltip-left"
+                    :data-tip="format.toDay(v.signing.jailed_until, 'long')"
+                  >
+                    <span>{{
+                      format.toDay(v.signing.jailed_until, 'from')
+                    }}</span>
+                  </div>
+                </span>
+                <span v-else class="text-neutral-content">-</span>
+              </td>
+              <td class="text-right text-neutral-content">
+                <span v-if="v.signing && v.signing.jailed_until.startsWith('1970')" class="text-right">{{
+                  format.percent(Number(v.signing.index_offset) / (latest - Number(v.signing.start_height)))
+                }}</span>
+                <span v-else>{{ v.signing?.index_offset || '-' }}</span>
+              </td>
+              <td class="text-right text-neutral-content">{{ v.signing?.start_height || '-' }}</td>
+              <td class="capitalize text-neutral-content">{{ v.signing?.tombstoned ? 'Yes' : 'No' }}</td>
+            </tr>
+          </tbody>
           <tfoot>
             <tr>
-              <td colspan="2" class="text-right">
+              <td colspan="2" class="text-right text-base-content font-semibold">
                 {{ $t('uptime.minimum_uptime') }}:
-                <span class="lowercase tooltip" :data-tip="`Window size: ${slashingParam.signed_blocks_window}`"
-                  ><span class="ml-2 btn btn-error btn-xs">{{
+                <span class="lowercase tooltip tooltip-top" :data-tip="`Window size: ${slashingParam.signed_blocks_window}`"
+                  ><span class="ml-2 badge badge-error text-error-content">{{
                     format.percent(slashingParam.min_signed_per_window)
                   }}</span>
                 </span>
               </td>
-              <td colspan="8"></td>
+              <td colspan="4"></td>
             </tr>
           </tfoot>
         </table>

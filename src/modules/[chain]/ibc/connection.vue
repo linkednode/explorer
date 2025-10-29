@@ -32,18 +32,20 @@ function pageload(p: number) {
 </script>
 <template>
   <div>
-    <div class="bg-base-100 px-4 pt-3 pb-4 rounded shadow">
+    <div class="bg-base-100 shadow-md rounded-box px-4 pt-3 pb-4">
       <div class="flex flex-wrap gap-4 items-center">
-        <h2 class="card-title py-4">{{ $t('ibc.title') }}</h2>
-        <div class="tabs tabs-boxed">
+        <h2 class="text-xl font-semibold py-4 text-base-content">{{ $t('ibc.title') }}</h2>
+        <div class="tabs tabs-boxed bg-base-200 rounded-box">
           <a
-            class="tab"
+            role="tab"
+            class="tab text-neutral-content uppercase"
             :class="{ 'tab-active': tab === 'registry' }"
             @click="tab = 'registry'"
             >{{ $t('ibc.registry') }}</a
           >
           <a
-            class="tab"
+            role="tab"
+            class="tab text-neutral-content uppercase"
             :class="{ 'tab-active': tab === 'favorite' }"
             @click="tab = 'favorite'"
             >{{ $t('module.favorite') }}</a
@@ -54,7 +56,8 @@ function pageload(p: number) {
         <div v-show="tab === 'registry'" class="flex flex-wrap gap-1 p-4">
           <span
             v-for="(s, i) in ibcStore.info"
-            class="btn btn-xs btn-link mr-1"
+            :key="i"
+            class="btn btn-xs btn-outline btn-primary rounded-btn mr-1 text-primary-content"
             @click="ibcStore.fetchConnection(i)"
             >{{
               s.chain_1.chain_name === ibcStore.chainName
@@ -70,20 +73,20 @@ function pageload(p: number) {
           >
         </div>
         <div v-show="tab === 'favorite'" class="flex flex-wrap gap-1 p-4">
-          <div class="join border border-primary">
-            <button class="join-item px-2">
+          <div class="join border border-primary rounded-box">
+            <button class="join-item px-2 text-base-content">
               {{ $t('ibc.connection_id') }}:
             </button>
             <input
               v-model="ibcStore.connectionId"
               type="number"
-              class="input input-bordered w-40 join-item"
+              class="input input-bordered w-40 join-item text-base-content"
               min="0"
               :max="pageResponse.total || 0"
               :placeholder="`0~${pageResponse.total}`"
             />
             <button
-              class="join-item btn btn-primary"
+              class="join-item btn btn-primary text-primary-content"
               @click="ibcStore.showConnection()"
             >
               {{ $t('ibc.btn_apply') }}

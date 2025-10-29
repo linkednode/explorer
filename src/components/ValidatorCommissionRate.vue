@@ -26,8 +26,8 @@ const series = computed(() => [s1.value, s2.value, s3, s4.value, s5.value]);
 const format = useFormatter();
 
 const chartConfig = computed(() => {
-  const secondaryText = `hsl(var(--bc))`;
-  const primaryText = `hsl(var(--bc))`;
+  const secondaryText = `hsl(var(--nc))`; // Neutral content for secondary text
+  const primaryText = `hsl(var(--bc))`; // Base content for primary text
 
   return {
     chart: {
@@ -35,11 +35,11 @@ const chartConfig = computed(() => {
       sparkline: { enabled: false },
     },
     colors: [
-      'rgba(109,120,141,0.2)',
-      'rgba(114,225,40,0.2)',
-      'rgba(114,225,40,1)',
-      'rgba(114,225,40,0.2)',
-      'rgba(109,120,141,0.2)',
+      `hsl(var(--b3) / 0.2)`, // Base-300 with opacity
+      `hsl(var(--su) / 0.2)`, // Success with opacity
+      `hsl(var(--su))`, // Success
+      `hsl(var(--su) / 0.2)`, // Success with opacity
+      `hsl(var(--b3) / 0.2)`, // Base-300 with opacity
     ],
     legend: { show: false },
     tooltip: { enabled: false },
@@ -47,7 +47,7 @@ const chartConfig = computed(() => {
     stroke: {
       width: 3,
       lineCap: 'round',
-      colors: ['hsl(var(--b1))'],
+      colors: ['hsl(var(--b1))'], // Base-100
     },
     labels: ['Available', 'Daily Change', 'Commission Rate', 'Daily Change', 'Available'],
     states: {
@@ -103,9 +103,9 @@ const chartConfig = computed(() => {
 </script>
 
 <template>
-  <div class="bg-base-100 rounded shadow p-4">
-    <div class="text-lg text-main font-semibold mb-1">Commission Rate</div>
-    <div class="text-sm text-gray-500 dark:text-gray-400">
+  <div class="bg-base-100 shadow-md rounded-box p-4">
+    <div class="text-lg text-base-content font-semibold mb-1">Commission Rate</div>
+    <div class="text-sm text-neutral-content">
       {{ `Updated at ${format.toDay(props.commission?.update_time, 'short')}` }}
     </div>
     <div class="w-80 m-auto">
@@ -115,15 +115,15 @@ const chartConfig = computed(() => {
       <div class="flex items-center justify-center flex-wrap gap-x-3">
         <div class="flex items-center gap-x-2">
           <div class="bg-success w-[6px] h-[6px] rounded-full"></div>
-          <span class="text-caption">Rate:{{ rate.toFixed(0) }}%</span>
+          <span class="text-xs text-neutral-content">Rate:{{ rate.toFixed(0) }}%</span>
         </div>
         <div class="flex items-center gap-x-2">
           <div class="bg-success w-[6px] h-[6px] rounded-full opacity-60"></div>
-          <span class="text-caption">24h: ±{{ change }}%</span>
+          <span class="text-xs text-neutral-content">24h: ±{{ change }}%</span>
         </div>
         <div class="flex items-center gap-x-2">
-          <div class="bg-secondary w-[6px] h-[6px] rounded-full"></div>
-          <span class="text-caption">Max:{{ max }}%</span>
+          <div class="bg-neutral w-[6px] h-[6px] rounded-full"></div>
+          <span class="text-xs text-neutral-content">Max:{{ max }}%</span>
         </div>
       </div>
     </div>
