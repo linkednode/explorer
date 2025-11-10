@@ -1,23 +1,30 @@
 {
-    "chain_name": "selfchain",
-    "registry_name": "selfchain",
-    "api": [
-        {"provider": "NodeStake", "address": "https://api.selfchain.nodestake.org"},
-    ],
-    "rpc": [
-        {"provider": "Nodestake", "address": "https://rpc.selfchain.nodestake.org"}
-    ],
-    "sdk_version": "0.47.10",
-    "coin_type": "118",
-    "min_tx_fee": "1",
-    "addr_prefix": "self",
-    "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg",
-    "assets": [
-      {
-        "base": "uslf",
-        "symbol": "SLF",
-        "exponent": "6",
-        "coingecko_id": "self-chain",
-        "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg"
-    }]
+  "chain_name": "selfchain",
+  "registry_name": "selfchain",
+  "api": [
+    {
+      "provider": "NodeStake",
+      "address": "https://api.selfchain.nodestake.org"
+    }
+  ],
+  "rpc": [
+    {
+      "provider": "Nodestake",
+      "address": "https://rpc.selfchain.nodestake.org"
+    }
+  ],
+  "sdk_version": "0.47.10",
+  "coin_type": "118",
+  "min_tx_fee": "1",
+  "addr_prefix": "self",
+  "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg",
+  "assets": [
+    {
+      "base": "uslf",
+      "symbol": "SLF",
+      "exponent": "6",
+      "coingecko_id": "self-chain",
+      "logo": "https://raw.githubusercontent.com/linkednode/explorer/refs/heads/master/public/logos/self.jpg"
+    }
+  ]
 }
