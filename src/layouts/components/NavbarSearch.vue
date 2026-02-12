@@ -68,10 +68,10 @@ function confirm() {
     <!-- modal -->
     <div
       v-if="searchModalShow"
-      class="cursor-pointer modal !pointer-events-auto !opacity-100 !visible"
+      class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 cursor-pointer"
       @click="closeSearchModal"
     >
-      <div class="relative modal-box cursor-default bg-base-100 rounded-box" @click="(event) => preventClick(event)">
+      <div class="relative w-full max-w-lg mx-4 p-6 cursor-default bg-base-100 rounded-box shadow-xl" @click="(event) => preventClick(event)">
         <!-- header -->
         <div class="flex items-center justify-between">
           <div class="text-lg font-bold flex flex-col md:!flex-row justify-between items-baseline text-base-content">

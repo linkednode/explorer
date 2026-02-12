@@ -47,75 +47,115 @@ const params = computed(() => {
 
 <template>
   <div class="dropdown dropdown-hover dropdown-end">
+    <!-- Wallet Button -->
     <label
       tabindex="0"
-      class="btn btn-sm btn-primary m-1 lowercase truncate !inline-flex text-xs md:!text-sm text-primary-content"
+      class="btn btn-sm m-1 gap-2 !inline-flex text-xs md:!text-sm transition-all duration-200"
+      :class="walletStore.currentAddress 
+        ? 'btn-outline btn-primary hover:btn-primary' 
+        : 'btn-primary text-primary-content shadow-sm hover:shadow-md'"
     >
-      <Icon icon="mdi:wallet" />
-      <span class="ml-1 hidden md:block"> {{ walletStore.shortAddress || 'Wallet' }}</span>
+      <div 
+        v-if="walletStore.currentAddress" 
+        class="w-2 h-2 rounded-full bg-success animate-pulse"
+      ></div>
+      <Icon v-else icon="mdi:wallet" class="text-base" />
+      <span class="hidden md:block font-medium">
+        {{ walletStore.shortAddress || 'Connect' }}
+      </span>
     </label>
+    
+    <!-- Dropdown Content -->
     <div
       tabindex="0"
-      class="dropdown-content menu shadow-lg p-2 bg-base-100 rounded-box w-52 md:!w-64 overflow-auto"
+      class="dropdown-content z-50 shadow-strong border border-base-300/50 p-3 bg-base-100 rounded-xl w-64 md:!w-72 overflow-hidden"
     >
+      <!-- Connect Button (when not connected) -->
       <label
         v-if="!walletStore?.currentAddress"
         for="PingConnectWallet"
-        class="btn btn-sm btn-primary text-primary-content"
+        class="btn btn-primary w-full gap-2 shadow-sm hover:shadow-md transition-all duration-200"
       >
-        <Icon icon="mdi:wallet" /><span class="ml-1 block">Connect Wallet</span>
+        <Icon icon="mdi:wallet-plus" class="text-lg" />
+        <span>Connect Wallet</span>
       </label>
-      <div class="px-2 mb-1 text-neutral-content font-semibold">
-        {{ walletStore.connectedWallet?.wallet }}
-      </div>
-      <div>
-        <a
-          v-if="walletStore.currentAddress"
-          class="block py-2 px-2 hover:bg-base-200 rounded cursor-pointer text-base-content"
-          style="overflow-wrap: anywhere"
+      
+      <!-- Connected State -->
+      <div v-if="walletStore.currentAddress">
+        <!-- Wallet Info Header -->
+        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-base-300/50">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+            <Icon icon="mdi:wallet" class="text-xl text-primary" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold text-base-content capitalize">
+              {{ walletStore.connectedWallet?.wallet || 'Wallet' }}
+            </div>
+            <div class="text-xs text-success flex items-center gap-1">
+              <div class="w-1.5 h-1.5 rounded-full bg-success"></div>
+              Connected
+            </div>
+          </div>
+        </div>
+        
+        <!-- Address -->
+        <button
+          class="w-full p-3 bg-base-200/50 hover:bg-base-200 rounded-lg cursor-pointer transition-colors duration-150 text-left group mb-3"
           @click="copyAdress(walletStore.currentAddress)"
         >
-          {{ walletStore.currentAddress }}
-        </a>
-        <div class="divider mt-1 mb-1"></div>
-        <RouterLink to="/wallet/accounts">
-          <div
-            class="block py-2 px-2 hover:!bg-base-200 rounded cursor-pointer text-base-content"
-          >
-            Accounts
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs text-base-content/60 font-medium">Address</span>
+            <Icon icon="mdi:content-copy" class="text-sm text-base-content/40 group-hover:text-primary transition-colors" />
           </div>
-        </RouterLink>
-        <RouterLink to="/wallet/portfolio">
-          <div
-            class="block py-2 px-2 hover:!bg-base-200 rounded cursor-pointer text-base-content"
-          >
-            Portfolio
+          <div class="text-xs text-base-content font-mono break-all leading-relaxed">
+            {{ walletStore.currentAddress }}
           </div>
-        </RouterLink>
-        <div v-if="walletStore.currentAddress" class="divider mt-1 mb-1"></div>
-        <a
-          v-if="walletStore.currentAddress"
-          class="block py-2 px-2 hover:bg-base-200 rounded cursor-pointer text-base-content"
+        </button>
+        
+        <!-- Navigation Links -->
+        <div class="space-y-1 mb-3">
+          <RouterLink to="/wallet/accounts" class="block">
+            <div class="flex items-center gap-3 py-2.5 px-3 hover:bg-base-200 rounded-lg cursor-pointer transition-colors duration-150 group">
+              <Icon icon="mdi:account-multiple" class="text-lg text-base-content/60 group-hover:text-primary transition-colors" />
+              <span class="text-sm font-medium text-base-content">Accounts</span>
+              <Icon icon="mdi:chevron-right" class="text-base text-base-content/30 ml-auto group-hover:text-primary transition-colors" />
+            </div>
+          </RouterLink>
+          <RouterLink to="/wallet/portfolio" class="block">
+            <div class="flex items-center gap-3 py-2.5 px-3 hover:bg-base-200 rounded-lg cursor-pointer transition-colors duration-150 group">
+              <Icon icon="mdi:chart-pie" class="text-lg text-base-content/60 group-hover:text-primary transition-colors" />
+              <span class="text-sm font-medium text-base-content">Portfolio</span>
+              <Icon icon="mdi:chevron-right" class="text-base text-base-content/30 ml-auto group-hover:text-primary transition-colors" />
+            </div>
+          </RouterLink>
+        </div>
+        
+        <!-- Disconnect Button -->
+        <button
+          class="w-full flex items-center justify-center gap-2 py-2.5 px-3 text-error hover:bg-error/10 rounded-lg cursor-pointer transition-colors duration-150 text-sm font-medium"
           @click="walletStore.disconnect()"
-          >Disconnect</a
         >
+          <Icon icon="mdi:logout" class="text-base" />
+          Disconnect
+        </button>
       </div>
     </div>
-    <div class="toast" v-show="showCopyToast === 1">
-      <div class="alert alert-success text-success-content">
-        <div class="text-xs md:!text-sm">
-          <span>{{ tipMsg.msg }}</span>
-        </div>
+    
+    <!-- Toast Notifications -->
+    <div class="toast toast-end z-50" v-show="showCopyToast === 1">
+      <div class="alert alert-success shadow-lg border-0 gap-2">
+        <Icon icon="mdi:check-circle" class="text-lg" />
+        <span class="text-sm font-medium">{{ tipMsg.msg }}</span>
       </div>
     </div>
-    <div class="toast" v-show="showCopyToast === 2">
-      <div class="alert alert-error text-error-content">
-        <div class="text-xs md:!text-sm">
-          <span>{{ tipMsg.msg }}</span>
-        </div>
+    <div class="toast toast-end z-50" v-show="showCopyToast === 2">
+      <div class="alert alert-error shadow-lg border-0 gap-2">
+        <Icon icon="mdi:alert-circle" class="text-lg" />
+        <span class="text-sm font-medium">{{ tipMsg.msg }}</span>
       </div>
     </div>
   </div>
+  
   <Teleport to="body">
     <ping-connect-wallet
       :chain-id="baseStore.currentChainId || 'cosmoshub-4'"

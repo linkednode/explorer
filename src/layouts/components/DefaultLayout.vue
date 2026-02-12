@@ -89,10 +89,10 @@ const show_ad = computed(() => {
 </script>
 
 <template>
-  <div class="bg-base-200 text-base-content">
+  <div class="bg-base-200 text-base-content min-h-screen">
     <!-- sidebar -->
     <div
-      class="fixed z-[999] top-0 bottom-0 overflow-auto bg-base-100 shadow-xl transition-all duration-300 ease-in-out transform"
+      class="fixed z-[999] top-0 bottom-0 overflow-auto bg-base-100 border-r border-base-300/50 transition-all duration-300 ease-smooth transform"
       :class="{
         'w-64': sidebarExpanded && !sidebarCollapsed,
         'w-16': sidebarCollapsed,
@@ -100,33 +100,37 @@ const show_ad = computed(() => {
         '-translate-x-full': !sidebarShow,
         'xl:translate-x-0 xl:!block': !sidebarShow || sidebarCollapsed,
       }"
-      style="pointer-events: auto;"
+      style="pointer-events: auto; box-shadow: var(--shadow-medium);"
     >
-      <!-- Overlay for mobile sidebar -->
-      <div class="flex justify-between mt-1 pl-4 py-4 mb-1">
-        <RouterLink to="/" class="flex items-center" :class="{ 'hidden': sidebarCollapsed }">
-          <img class="w-10 h-10" src="../../assets/home.svg" />
-          <h1 class="flex-1 ml-3 text-2xl font-semibold text-primary">
+      <!-- Sidebar Header -->
+      <div class="flex justify-between items-center px-4 py-4 border-b border-base-300/30">
+        <RouterLink to="/" class="flex items-center group" :class="{ 'hidden': sidebarCollapsed }">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-glow transition-transform duration-200 group-hover:scale-105">
+            <img class="w-6 h-6 brightness-0 invert" src="../../assets/home.svg" />
+          </div>
+          <h1 class="flex-1 ml-3 text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             linkednode
           </h1>
         </RouterLink>
         <div class="flex items-center" :class="{ 'w-full justify-center': sidebarCollapsed }">
-          <RouterLink to="/" class="flex items-center" v-if="sidebarCollapsed">
-            <img class="w-10 h-10" src="../../assets/home.svg" />
+          <RouterLink to="/" class="flex items-center group" v-if="sidebarCollapsed">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-glow transition-transform duration-200 group-hover:scale-105">
+              <img class="w-6 h-6 brightness-0 invert" src="../../assets/home.svg" />
+            </div>
           </RouterLink>
-          <div
-            class="pr-4 cursor-pointer xl:!hidden"
+          <button
+            class="p-2 rounded-lg hover:bg-base-200 transition-colors duration-200 xl:!hidden"
             @click="sidebarShow = false"
           >
-            <Icon icon="mdi-close" class="text-2xl" />
-          </div>
-          <div
-            class="pl-4 cursor-pointer hidden xl:!block"
+            <Icon icon="mdi-close" class="text-xl text-base-content/70" />
+          </button>
+          <button
+            class="p-2 rounded-lg hover:bg-base-200 transition-colors duration-200 hidden xl:!flex items-center justify-center"
             @click="toggleSidebarCollapsed"
-            :class="{ 'w-full text-center': sidebarCollapsed }"
+            :class="{ 'w-full': sidebarCollapsed }"
           >
-            <Icon :icon="sidebarCollapsed ? 'mdi-arrow-right-circle' : 'mdi-arrow-left-circle'" class="text-2xl" />
-          </div>
+            <Icon :icon="sidebarCollapsed ? 'mdi-chevron-right' : 'mdi-chevron-left'" class="text-xl text-base-content/70" />
+          </button>
         </div>
       </div>
       <div v-for="(item, index) of blockchain.computedChainMenu" :key="index" class="px-2">
@@ -328,7 +332,7 @@ const show_ad = computed(() => {
       ></div>
 
     <div
-      class="px-3 pt-4 transition-all duration-300 ease-in-out relative z-20"
+      class="px-4 pt-4 pb-6 transition-all duration-300 ease-smooth relative z-20"
       :class="{
         'xl:!ml-64': sidebarExpanded && !sidebarCollapsed,
         'xl:!ml-16': sidebarCollapsed,
@@ -337,51 +341,54 @@ const show_ad = computed(() => {
     >
       <!-- header -->
       <div
-        class="flex items-center py-3 bg-base-100 shadow-md mb-4 rounded-box px-4 sticky top-0 z-10"
+        class="flex items-center py-3 bg-base-100/95 backdrop-blur-md mb-6 rounded-xl px-4 sticky top-4 z-10 border border-base-300/30"
+        style="box-shadow: var(--shadow-soft);"
       >
-        <div
-          class="text-2xl pr-3 cursor-pointer xl:!hidden"
+        <button
+          class="p-2 rounded-lg hover:bg-base-200 transition-colors duration-200 mr-2 xl:!hidden"
           @click="sidebarShow = true"
         >
-          <Icon icon="mdi-menu" />
-        </div>
+          <Icon icon="mdi-menu" class="text-xl text-base-content/80" />
+        </button>
         <ChainProfile />
 
         <div class="flex-1 w-0"></div>
 
-        <!-- <NavSearchBar />-->
-        <NavBarI18n class="hidden md:!inline-block" />
-        <NavbarThemeSwitcher class="!inline-block" />
-        <NavbarSearch class="!inline-block" />
-        <NavBarWallet />
+        <!-- Navigation Actions -->
+        <div class="flex items-center gap-1">
+          <NavBarI18n class="hidden md:!inline-block" />
+          <NavbarThemeSwitcher class="!inline-block" />
+          <NavbarSearch class="!inline-block" />
+          <NavBarWallet />
+        </div>
       </div>
 
       <!-- 👉 Pages -->
-      <div style="min-height: calc(100vh - 180px)">
-        <div v-if="behind" class="alert alert-error mb-4">
-          <div class="flex gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              class="stroke-current flex-shrink-0 w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-            <span
-              >{{ $t('pages.out_of_sync') }} {{ blocktime.format() }} ({{
-                blocktime.fromNow()
-              }})</span
-            >
+      <div class="min-h-[calc(100vh-180px)] animate-fade-in">
+        <div v-if="behind" class="alert alert-error mb-6 shadow-md border-0">
+          <div class="flex gap-3 items-center">
+            <div class="p-2 bg-error/20 rounded-lg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="stroke-current w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+            <span class="font-medium">
+              {{ $t('pages.out_of_sync') }} {{ blocktime.format() }} ({{ blocktime.fromNow() }})
+            </span>
           </div>
         </div>
         <RouterView v-slot="{ Component }">
-          <Transition mode="out-in">
+          <Transition mode="out-in" name="fade">
             <div>
               <AdBanner v-if="show_ad" />
               <Component :is="Component" />
@@ -394,3 +401,16 @@ const show_ad = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
+</style>

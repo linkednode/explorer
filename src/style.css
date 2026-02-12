@@ -4,13 +4,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables for enhanced theming */
+:root {
+  --shadow-soft: 0 2px 8px -2px rgba(0, 0, 0, 0.08), 0 4px 16px -4px rgba(0, 0, 0, 0.12);
+  --shadow-medium: 0 4px 12px -2px rgba(0, 0, 0, 0.1), 0 8px 24px -4px rgba(0, 0, 0, 0.15);
+  --shadow-strong: 0 8px 24px -4px rgba(0, 0, 0, 0.12), 0 16px 48px -8px rgba(0, 0, 0, 0.18);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] {
+  --shadow-soft: 0 2px 8px -2px rgba(0, 0, 0, 0.3), 0 4px 16px -4px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 4px 12px -2px rgba(0, 0, 0, 0.35), 0 8px 24px -4px rgba(0, 0, 0, 0.45);
+  --shadow-strong: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 16px 48px -8px rgba(0, 0, 0, 0.5);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   height: 100%;
 }
 
 body {
-  transition: color 0.5s, background-color 0.5s;
+  transition: color var(--transition-normal), background-color var(--transition-normal);
   line-height: 1.6;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -20,14 +40,151 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Enhanced focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(var(--p));
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid hsl(var(--p));
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--bc) / 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--bc) / 0.3);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: hsl(var(--bc) / 0.15);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--bc) / 0.25);
+}
+
+/* Table improvements */
 .table th:first-child {
   position: relative;
   z-index: 2;
 }
 
+.table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Gradient backgrounds */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, hsl(var(--p)) 0%, hsl(var(--p) / 0.8) 100%);
+}
+
+.bg-gradient-subtle {
+  background: linear-gradient(180deg, hsl(var(--b2)) 0%, hsl(var(--b1)) 100%);
+}
+
+/* Glass effect */
+.glass-effect {
+  background: hsl(var(--b1) / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Skeleton loading animation */
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton-loading {
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background: linear-gradient(90deg, hsl(var(--b3)) 25%, hsl(var(--b2)) 50%, hsl(var(--b3)) 75%);
+  background-size: 200% 100%;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in var(--transition-normal) ease-out;
+}
+
+/* Scale animation for interactive elements */
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in var(--transition-fast) ease-out;
+}
+
+/* Pulse animation for notifications */
+@keyframes pulse-soft {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Slide transitions */
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.25s ease-out;
+  transition: all var(--transition-normal) ease-out;
 }
 
 .slide-up-enter-from {
@@ -38,4 +195,112 @@ body {
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(-calc(15%));
+}
+
+/* Improved button styles */
+.btn {
+  transition: all var(--transition-fast);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Badge improvements */
+.badge {
+  transition: all var(--transition-fast);
+}
+
+/* Input improvements */
+.input,
+.select,
+.textarea {
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  box-shadow: 0 0 0 3px hsl(var(--p) / 0.15);
+}
+
+/* Dropdown improvements */
+.dropdown-content {
+  animation: fade-in var(--transition-fast) ease-out;
+}
+
+/* Modal improvements */
+.modal-box {
+  animation: scale-in var(--transition-normal) ease-out;
+}
+
+/* Link hover effects */
+.link {
+  transition: color var(--transition-fast);
+}
+
+/* Avatar ring effect */
+.avatar-ring {
+  box-shadow: 0 0 0 3px hsl(var(--b1)), 0 0 0 5px hsl(var(--p) / 0.3);
+}
+
+/* Status indicator pulse */
+.status-online {
+  position: relative;
+}
+
+.status-online::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: hsl(var(--su) / 0.4);
+  animation: pulse-soft 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Improved divider */
+.divider::before,
+.divider::after {
+  background: linear-gradient(90deg, transparent, hsl(var(--bc) / 0.1), transparent);
+}
+
+/* Tab improvements */
+.tabs-boxed {
+  background: hsl(var(--b2));
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+}
+
+.tabs-boxed .tab {
+  border-radius: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.tabs-boxed .tab-active {
+  background: hsl(var(--b1));
+  box-shadow: var(--shadow-soft);
+}
+
+/* Progress bar improvements */
+.progress {
+  overflow: hidden;
+  border-radius: 9999px;
+}
+
+.progress::-webkit-progress-value {
+  transition: width var(--transition-slow);
+}
+
+/* Alert improvements */
+.alert {
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--bc) / 0.1);
+}
+
+/* Tooltip improvements */
+.tooltip::before {
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
 }

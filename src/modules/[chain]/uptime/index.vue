@@ -28,6 +28,7 @@ interface ValidatorUnit {
   blocks: BlockColor[];
   hex: string;
   base64: string;
+  operator_address: string;
   missed_blocks_counter: number | string;
   uptime: number;
   signing: SigningInfo;
@@ -44,12 +45,13 @@ const validatorSet = computed(() => {
   if (chainStore.isConsumerChain) {
     return consumerValidators.value.map((v) => {
       const b64 = valconsToBase64(v.moniker);
-      const moniker = stakingStore.validators.find(
+      const validator = stakingStore.validators.find(
         (x) => toBase64(fromHex(consensusPubkeyToHexAddress(x.consensus_pubkey))) === b64
-      )?.description.moniker;
+      );
       return {
-        moniker: moniker || v.moniker,
+        moniker: validator?.description.moniker || v.moniker,
         base64: v.base64,
+        operator_address: validator?.operator_address || '',
       };
     });
   }
@@ -58,6 +60,7 @@ const validatorSet = computed(() => {
     return {
       moniker: v.description.moniker,
       base64: toBase64(fromHex(hex)),
+      operator_address: v.operator_address,
     };
   });
 });
@@ -77,6 +80,7 @@ const grid = computed(() => {
     return {
       moniker: v.moniker,
       base64: v.base64,
+      operator_address: v.operator_address,
       blocks: padding(blockColors.value[v.base64] || []),
       uptime,
       missed_blocks_counter: signing?.missed_blocks_counter,
@@ -226,7 +230,7 @@ function changeTab(v: string) {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4 justify-center">
           <div v-for="(unit, i) in grid" :key="i" class="bg-base-200 rounded-box p-3 shadow-sm">
             <div class="flex justify-between items-center mb-2">
-              <RouterLink :to="`/${chain}/staking/${unit.base64}`" class="truncate text-base-content font-medium text-sm link link-hover">
+              <RouterLink :to="`/${chain}/staking/${unit.operator_address}`" class="truncate text-base-content font-medium text-sm link link-hover">
                 {{ i + 1 }}. {{ unit.moniker }}
               </RouterLink>
               <div
@@ -275,7 +279,7 @@ function changeTab(v: string) {
           <tbody>
             <tr v-for="(v, i) in grid" :key="v.base64" class="hover:bg-base-200 transition-colors duration-200">
               <td>
-                <RouterLink :to="`/${chain}/staking/${v.base64}`" class="truncate text-primary link link-hover" style="max-width: 200px">{{ i + 1 }}. {{ v.moniker }}</RouterLink>
+                <RouterLink :to="`/${chain}/staking/${v.operator_address}`" class="truncate text-primary link link-hover" style="max-width: 200px">{{ i + 1 }}. {{ v.moniker }}</RouterLink>
               </td>
               <td class="text-right">
                 <span :class="v.uptime && v.uptime > 0.95 ? 'text-success' : 'text-error'">
